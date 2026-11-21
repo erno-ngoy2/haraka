@@ -6,6 +6,8 @@ Ce fichier est lu par Claude Code au début de chaque session. Il explique **ce 
 
 Une IA simple qui **prédit les embouteillages** en RDC à partir de : la localisation (x = latitude, y = longitude), l'heure, le jour de la semaine, les jours fériés, la pluie et les circonstances (normal, accident, travaux, événement). Elle donne le niveau de trafic (`fluide`, `dense`, `embouteillage`) **heure par heure**, avec le risque d'embouteillage et la meilleure heure pour partir.
 
+**Ville de départ : Lubumbashi** (fuseau `Africa/Lubumbashi`, UTC+2, centre -11.66 / 27.48 dans `config.py`).
+
 ## Qui travaille dessus
 
 - Développeur Android (Android Studio, Kotlin, Flutter, React Native) et Python, ingénieur en génie électrique, en RDC.
@@ -100,11 +102,13 @@ Pour tester depuis l'app : émulateur Android = `http://10.0.2.2:5000` ; vrai t�
 - [ ] **App Android : service de collecte GPS** (Foreground Service, FusedLocationProvider, mode conduite, envoi par lots avec WorkManager)
 - [ ] App Android : bouton « Signaler » (accident / travaux / événement)
 - [ ] App Android : écran de prévisions (appelle `POST /previsions`)
-- [ ] Définir les 10 à 20 zones/axes de départ et la ville exacte (**mettre à jour `LAT_CENTRE`, `LON_CENTRE`, `FUSEAU` dans `config.py`**)
+- [x] Ville de départ : Lubumbashi (2026-11-21)
+- [ ] Choisir les 10 à 20 axes de Lubumbashi à suivre en premier
 - [ ] Première collecte réelle + observations manuelles (voir README)
 - [x] Serveur prêt pour Vercel + Firestore (app.py unique, stockage.py, modèle compressé ~6 Mo), testé en local
 - [x] Déployé sur Vercel : https://haraka-nine.vercel.app (2026-11-21), modèle de test
-- [ ] Créer la base Firestore et mettre `FIREBASE_CREDENTIALS` et `TRAFIC_CLE` dans Vercel (au 2026-11-21 : ni l'un ni l'autre, `/collecte` est ouvert et ne stocke rien)
+- [x] Firestore branché (`FIREBASE_CREDENTIALS`) et `/collecte` protégé par `TRAFIC_CLE` dans Vercel : collecte testée en ligne le 2026-11-21
+- [ ] Remplacer `TRAFIC_CLE` par un vrai mot de passe aléatoire (la valeur actuelle est trop facile à deviner)
 - [x] Entraînement « production » : historique durable, purge des brutes à 30 jours, garde-fous, rapports, `zone_connue` ; validé avec `simuler_gps.py` (refus à 10 jours, publication à 35, comparaison à 40)
 - [x] Jours fériés précisés (créneaux, reports 2026)
 - [ ] Ajouter chaque année les reports de fériés dans `feries.csv` (ex. ceux de 2027)

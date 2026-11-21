@@ -11,10 +11,11 @@ OBSERVATIONS_CSV = DATA / "observations_manuelles.csv"
 TRAFIC_CSV = BASE / "trafic.csv"             # jeu d'entraînement (produit par aggregation.py)
 MODELE = BASE / "model_trafic.joblib"        # modèle entraîné
 
-# Fuseau horaire de ta ville : "Africa/Lubumbashi" (UTC+2) ou "Africa/Kinshasa" (UTC+1)
+# Ville de départ : LUBUMBASHI (décidé le 2026-11-21).
+# Fuseau horaire : "Africa/Lubumbashi" (UTC+2). Pour Kinshasa ce serait "Africa/Kinshasa" (UTC+1).
 FUSEAU = "Africa/Lubumbashi"
 
-# Centre de ta ville (EXEMPLE : à remplacer). Sert au générateur de données de test
+# Centre-ville de Lubumbashi. Sert au générateur de données de test, à la simulation
 # et à la météo (position de référence).
 LAT_CENTRE = -11.66
 LON_CENTRE = 27.48
