@@ -25,3 +25,6 @@ trafic_info.json
 # Ancien modèle (retour arrière local) et mode simulation
 model_trafic.precedent.joblib
 simulation/
+
+# Réglages de PyCharm / Android Studio (propres à ton PC)
+.idea/
