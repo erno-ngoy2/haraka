@@ -140,13 +140,43 @@ def ajouter_points(device, points):
     if not points:
         return
     if _type_ou_erreur() == "firestore":
-        from google.cloud.firestore import SERVER_TIMESTAMP
-        _firestore().collection(config.COLLECTION_ENVOIS).add(
+        from google.cloud.firestore import SERVER_TIMESTAMP, Increment
+        db = _firestore()
+        db.collection(config.COLLECTION_ENVOIS).add(
             {"device": device, "recu_le": SERVER_TIMESTAMP, "points": points})
+        # Compteurs pour l'avancement de l'IA (sans relire toute la base) : 1 écriture de plus
+        par_jour = {}
+        for p in points:
+            j = _jour_local(p["ts"])
+            par_jour[j] = par_jour.get(j, 0) + 1
+        db.collection("compteurs").document("collecte").set(
+            {"positions": Increment(len(points)), "jours": {j: Increment(n) for j, n in par_jour.items()}},
+            merge=True)
     else:
         lignes = [tuple([device] + [p[c] for c in COLONNES_POSITIONS[1:]]) for p in points]
         with closing(_sqlite()) as con, con:
             con.executemany("INSERT INTO positions VALUES (?,?,?,?,?,?,?)", lignes)
+
+
+def _jour_local(ts):
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).astimezone(ZoneInfo(config.FUSEAU)).date().isoformat()
+
+
+def stats_collecte():
+    """(positions GPS reçues au total, nombre de jours de collecte) pour l'avancement de l'IA.
+    Firestore : lu dans le document de compteurs (les positions brutes, elles, sont purgées
+    après 30 jours, mais le compteur garde l'historique)."""
+    if _type_ou_erreur() == "firestore":
+        snap = _firestore().collection("compteurs").document("collecte").get()
+        d = (snap.to_dict() or {}) if snap.exists else {}
+        return int(d.get("positions", 0)), len([j for j, n in (d.get("jours") or {}).items() if n])
+    if not config.DB.exists():
+        return 0, 0
+    with closing(_sqlite()) as con:
+        lignes = con.execute("SELECT ts FROM positions").fetchall()
+    return len(lignes), len({_jour_local(t[0]) for t in lignes})
 
 
 def ajouter_signalement(s):

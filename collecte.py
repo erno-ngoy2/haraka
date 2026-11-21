@@ -133,8 +133,12 @@ def enregistrer(fonction, doc):
     return jsonify({"ok": True, "route": doc["route"], "point_route": point})
 
 
-def _point(doc):
-    return {"lat": doc["lat"], "lon": doc["lon"], "ts": doc["ts"], "device": doc["device"]}
+def _point(doc, d=None):
+    """Point de tracé. Saisi à la main (coordonnées tapées) : marqué "saisie": "manuelle"."""
+    p = {"lat": doc["lat"], "lon": doc["lon"], "ts": doc["ts"], "device": doc["device"]}
+    if d is not None and d.get("saisie") == "manuelle":
+        p["saisie"] = "manuelle"
+    return p
 
 
 # --- Écriture (clé obligatoire si TRAFIC_CLE est définie) --------------------
@@ -235,7 +239,7 @@ def creer_route():
                                   f"à {proche['distance_m']} m.", "route": proche}), 409
 
     doc = {"nom": nom, "origine": "terrain", "description": str(d.get("description") or "").strip()[:200],
-           "points": [_point(base)], "cree_par": base["device"], "cree_le": base["ts"]}
+           "points": [_point(base, d)], "cree_par": base["device"], "cree_le": base["ts"]}
     if "contexte" in base:
         doc["contexte_creation"] = base["contexte"]
     try:
@@ -269,7 +273,7 @@ def ajouter_point(numero):
     if route["nb_points"] >= config.MAX_POINTS_ROUTE:
         return jsonify({"erreur": f"« {route['nom']} » a déjà {config.MAX_POINTS_ROUTE} points."}), 400
     try:
-        maj, ajoute = routes.ajouter_point(numero, _point(base), toutes)
+        maj, ajoute = routes.ajouter_point(numero, _point(base, d), toutes)
     except stockage.StockageIndisponible as e:
         return jsonify({"erreur": str(e)}), 503
     if maj is None:

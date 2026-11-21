@@ -79,6 +79,9 @@ POINTS_ROUTE_PRETE = 11         # « plus de 10 points » : forme exacte, route 
 FRAICHEUR_OBSERVATION_MIN = 60
 CACHE_CARTE_S = 60              # /carte est recalculée au plus toutes les 60 s
 CACHE_AVANCEMENT_IA_S = 300     # comptage des données d'entraînement : toutes les 5 min
+# Entraînement automatique : positions GPS à recevoir pour la part « volume » de l'avancement
+# (≈ 500 lignes zone+heure fiables × 10 points minimum chacune × marge pour les points écartés).
+OBJECTIF_POSITIONS_GPS = 20000
 
 # Routes créées sur le terrain depuis l'app (numéros 11, 12, ...), et points relevés sur
 # toutes les routes : rangés dans Firestore (un document par route).

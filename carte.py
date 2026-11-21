@@ -28,35 +28,29 @@ _cache = {"carte": {}, "ia": (0.0, None)}
 
 
 def avancement_ia():
-    """Pourcentage d'avancement de l'entraînement, en 3 parts égales :
-       données (jours d'observations / MIN_JOURS_ENTRAINEMENT), volume (observations /
-       MIN_LIGNES_ENTRAINEMENT), modèle (100 % si un modèle entraîné sur de VRAIES données
-       est en ligne). Les positions GPS automatiques (pas encore dans l'app) compteront plus tard."""
+    """Pourcentage d'avancement de l'entraînement AUTOMATIQUE (collecte GPS), en 3 parts égales :
+       données (jours de collecte / MIN_JOURS_ENTRAINEMENT), volume (positions GPS reçues /
+       OBJECTIF_POSITIONS_GPS), modèle (100 % si un modèle entraîné sur de VRAIES données est en ligne)."""
     quand, valeur = _cache["ia"]
     if valeur is not None and time.monotonic() - quand < config.CACHE_AVANCEMENT_IA_S:
         return valeur
     try:
-        obs = stockage.lire_observations()
+        positions, jours = stockage.stats_collecte()
     except stockage.StockageIndisponible:
-        obs = pd.DataFrame()
-    nb_obs = len(obs)
-    jours = 0
-    if nb_obs:
-        ts = pd.to_datetime(obs["ts"], utc=True, format="ISO8601", errors="coerce").dt.tz_convert(config.FUSEAU)
-        jours = int(ts.dt.date.nunique())
+        positions, jours = 0, 0
     try:
         modele = prevision.infos_modele()
     except FileNotFoundError:
         modele = None
     parts = {
         "donnees": round(min(jours / config.MIN_JOURS_ENTRAINEMENT, 1) * 100, 1),
-        "volume": round(min(nb_obs / config.MIN_LIGNES_ENTRAINEMENT, 1) * 100, 1),
+        "volume": round(min(positions / config.OBJECTIF_POSITIONS_GPS, 1) * 100, 1),
         "modele": 0 if (modele is None or modele["donnees_test"]) else 100,
     }
     valeur = {
         "pourcentage": round(sum(parts.values()) / 3, 1),
         "parts": parts,
-        "observations": nb_obs, "objectif_observations": config.MIN_LIGNES_ENTRAINEMENT,
+        "positions": positions, "objectif_positions": config.OBJECTIF_POSITIONS_GPS,
         "jours": jours, "objectif_jours": config.MIN_JOURS_ENTRAINEMENT,
         "modele": modele,
     }
