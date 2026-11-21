@@ -26,9 +26,12 @@ DECIMALES_ZONE = 3
 
 # --- Fiabilité des lignes zone + heure --------------------------------------
 PRECISION_GPS_MAX_M = 30     # on ignore les points GPS moins précis que ça
-MIN_POINTS = 10              # points GPS minimum par zone + heure
-MIN_APPAREILS = 2            # appareils différents minimum par zone + heure
-MIN_LIGNES_PAR_ZONE = 10     # lignes minimum pour estimer la "vitesse normale" d'une zone
+# PHASE CARTOGRAPHIE (2026-11-21) : une ou deux voitures en « Mode conduite », un point
+# toutes les 2 s. Une voiture traverse une case de 100 m en 5 à 15 s -> 3 à 7 points.
+# Avec plus de conducteurs (app grand public), remonter à MIN_POINTS = 10, MIN_APPAREILS = 2.
+MIN_POINTS = 3               # points GPS minimum par zone + heure
+MIN_APPAREILS = 1            # appareils différents minimum par zone + heure
+MIN_LIGNES_PAR_ZONE = 5      # lignes minimum pour estimer la "vitesse normale" d'une zone
 
 # --- Définition des niveaux (ratio vitesse mesurée / vitesse normale) ---------
 SEUIL_EMBOUTEILLAGE = 0.40   # en dessous : embouteillage
@@ -79,9 +82,9 @@ POINTS_ROUTE_PRETE = 11         # « plus de 10 points » : forme exacte, route 
 FRAICHEUR_OBSERVATION_MIN = 60
 CACHE_CARTE_S = 60              # /carte est recalculée au plus toutes les 60 s
 CACHE_AVANCEMENT_IA_S = 300     # comptage des données d'entraînement : toutes les 5 min
-# Entraînement automatique : positions GPS à recevoir pour la part « volume » de l'avancement
-# (≈ 500 lignes zone+heure fiables × 10 points minimum chacune × marge pour les points écartés).
-OBJECTIF_POSITIONS_GPS = 20000
+# Mode conduite : environ 5 positions GPS (une case de 100 m traversée, un point toutes les
+# 2 s) comptent pour un exemple d'entraînement dans l'avancement de l'IA.
+POSITIONS_PAR_EXEMPLE = 5
 
 # Routes créées sur le terrain depuis l'app (numéros 11, 12, ...), et points relevés sur
 # toutes les routes : rangés dans Firestore (un document par route).

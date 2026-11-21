@@ -29,21 +29,25 @@ _cache = {"carte": {}, "ia": (0.0, None)}
 
 def avancement_ia():
     """Pourcentage d'avancement de l'entraînement, en 3 parts égales :
-       données (jours avec des exemples / MIN_JOURS_ENTRAINEMENT), volume (exemples de niveau de
-       trafic reçus via « Signaler » / MIN_LIGNES_ENTRAINEMENT), modèle (100 % si un modèle entraîné
-       sur de VRAIES données est en ligne). La vitesse GPS viendra plus tard (utilisateurs finaux)."""
+       données (jours avec des données / MIN_JOURS_ENTRAINEMENT), volume (exemples / MIN_LIGNES_ENTRAINEMENT),
+       modèle (100 % si un modèle entraîné sur de VRAIES données est en ligne).
+       Exemples = signalements avec niveau + positions du Mode conduite / POSITIONS_PAR_EXEMPLE
+       (une case de 100 m traversée ≈ quelques points GPS ≈ un exemple zone + heure)."""
     quand, valeur = _cache["ia"]
     if valeur is not None and time.monotonic() - quand < config.CACHE_AVANCEMENT_IA_S:
         return valeur
     try:
         obs = stockage.lire_observations()
+        positions, jours_gps = stockage.stats_collecte()
     except stockage.StockageIndisponible:
-        obs = pd.DataFrame()
-    exemples = len(obs)
+        obs, positions, jours_gps = pd.DataFrame(), 0, 0
+    signalements = len(obs)
     jours = 0
-    if exemples:
+    if signalements:
         ts = pd.to_datetime(obs["ts"], utc=True, format="ISO8601", errors="coerce").dt.tz_convert(config.FUSEAU)
         jours = int(ts.dt.date.nunique())
+    jours = max(jours, jours_gps)
+    exemples = signalements + positions // config.POSITIONS_PAR_EXEMPLE
     try:
         modele = prevision.infos_modele()
     except FileNotFoundError:
@@ -57,6 +61,7 @@ def avancement_ia():
         "pourcentage": round(sum(parts.values()) / 3, 1),
         "parts": parts,
         "observations": exemples, "objectif_observations": config.MIN_LIGNES_ENTRAINEMENT,
+        "signalements": signalements, "positions_gps": positions,
         "jours": jours, "objectif_jours": config.MIN_JOURS_ENTRAINEMENT,
         "modele": modele,
     }
