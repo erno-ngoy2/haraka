@@ -168,14 +168,32 @@ def signalement():
     d = request.get_json(silent=True) or {}
     types = types_signalement()
     try:
-        t = types[str(d["type"]).lower()]
+        niveau = str(d["niveau"]).lower() if d.get("niveau") else None
+        if niveau is not None and niveau not in config.NIVEAUX:
+            raise ValueError("niveau")
+        t = types[str(d["type"]).lower()] if d.get("type") else None
+        if t is None and niveau is None:
+            raise ValueError("ni niveau ni type")
         doc = base_commune(d)
     except (KeyError, ValueError, TypeError):
-        return jsonify({"erreur": "champs requis : ts (ISO 8601), lat, lon, type parmi : "
-                                  + ", ".join(types)}), 400
-    doc.update({"type": t["id"], "nom_type": t["nom"], "categorie": t["categorie"],
-                "circonstance": t["circonstance"]})
-    return enregistrer(stockage.ajouter_signalement, doc)
+        return jsonify({"erreur": "champs requis : ts (ISO 8601), lat, lon, et niveau ("
+                                  + "/".join(config.NIVEAUX) + ") et/ou type parmi : " + ", ".join(types)}), 400
+
+    def sauver(doc):
+        # 1. Le signalement d'un incident ou d'un lieu (s'il y en a un)
+        if t is not None:
+            stockage.ajouter_signalement({**doc, "type": t["id"], "nom_type": t["nom"],
+                                          "categorie": t["categorie"], "circonstance": t["circonstance"]})
+        # 2. Le niveau de trafic constaté = un EXEMPLE D'ENTRAÎNEMENT pour l'IA, avec tout le
+        #    contexte (heure, jour, date, férié, météo, position, rue) ; la circonstance vient
+        #    de l'incident signalé en même temps (sinon « normal »).
+        if niveau is not None:
+            meteo = (doc.get("contexte") or {}).get("meteo") or {}
+            stockage.ajouter_observation({**doc, "niveau": niveau, "source": "signalement",
+                                          "circonstance": (t or {}).get("circonstance") or "normal",
+                                          "pluie": 1 if int(meteo.get("pluie") or 0) else 0})
+
+    return enregistrer(sauver, doc)
 
 
 @bp.post("/observation")
