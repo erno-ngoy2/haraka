@@ -1,75 +1,164 @@
-"""Les routes suivies et « sur quelle route suis-je ? ».
+"""Les routes suivies, leurs points relevés sur le terrain, et « sur quelle route suis-je ? ».
 
-Deux sortes de routes :
-  - les 10 routes de DÉPART (data/routes.json) : fixes, une ligne droite départ -> arrivée ;
-  - les routes CRÉÉES sur le terrain depuis l'app (11, 12, ...) : rangées dans la base
-    (stockage.py), elles commencent par un seul point puis s'allongent à chaque point ajouté.
+Trois sortes de routes (toutes au même format) :
+  - "depart"    : les 10 routes de départ (data/routes.json, ids 1 à 10). Leur départ et leur
+                  arrivée servent seulement de « référence » tant qu'il n'y a pas de points ;
+  - "catalogue" : les rues de Lubumbashi relevées sur internet (data/rues_lubumbashi.json,
+                  ids 1001...) : un nom, sans coordonnées au départ ;
+  - "terrain"   : les routes créées depuis l'app (ids 11, 12, ...).
 
-Une route est un TRACÉ (liste de points). Un point est « sur » une route s'il est à moins de
-config.DISTANCE_MAX_ROUTE_M du tracé. La même règle est codée dans l'app Android
-(DetecteurRoute.kt) : garder les deux pareilles.
+La VRAIE forme d'une route vient des points relevés sur le terrain (rangés dans la base,
+un document par route, voir stockage.py). Seuils dans config.py :
+  POINTS_ROUTE_DESSINEE (4)   les points se relient en une route sur la carte
+  POINTS_ETAT_TEMPS_REEL (6)  l'état de la route (fluide / dense / embouteillage) s'affiche
+  POINTS_ROUTE_PRETE (11)     la route a sa forme : 100 %, « prête »
+
+La même géométrie est codée dans l'app Android (DetecteurRoute.kt) : garder les deux pareilles.
 """
 import functools
 import json
 import math
+import re
 import time
+import unicodedata
 
 import config
 import stockage
 
 RAYON_TERRE_M = 6_371_000
-_cache = {"quand": 0.0, "routes": None}
+_cache = {"quand": 0.0, "docs": None}
+TYPES_VOIE = {"avenue": "avenue", "av": "avenue", "boulevard": "boulevard", "bd": "boulevard",
+              "rue": "rue", "route": "route", "chaussee": "chaussée"}
+ARTICLES = {"de", "du", "des", "la", "le", "les", "l", "d"}
 
+
+# --- Noms --------------------------------------------------------------------------
+
+def _sans_accents(texte):
+    return "".join(c for c in unicodedata.normalize("NFD", texte) if unicodedata.category(c) != "Mn")
+
+
+def _mots(nom):
+    nom = re.sub(r"\(.*?\)", " ", _sans_accents(str(nom)).lower())
+    return re.findall(r"[a-z0-9]+", nom)
+
+
+def type_de_voie(nom):
+    m = _mots(nom)
+    return TYPES_VOIE.get(m[0], "autre") if m else "autre"
+
+
+def cle_nom(nom):
+    """Nom réduit pour comparer : sans type de voie, articles, accents, tirets ni espaces.
+    « Avenue Kasa-Vubu (tronçon) » et « Av. Kasavubu » -> « kasavubu »."""
+    m = _mots(nom)
+    if m and m[0] in TYPES_VOIE:
+        m = m[1:]
+    return "".join(x for x in m if x not in ARTICLES)
+
+
+# --- Liste des routes ----------------------------------------------------------------
 
 @functools.lru_cache(maxsize=1)
 def charger_depart():
     return json.loads(config.ROUTES_JSON.read_text(encoding="utf-8"))
 
 
-def _depuis_json(r):
-    pts = [r["depart"], r["arrivee"]]
-    return {**r, "origine": "depart",
-            "points": [{"latitude": p["latitude"], "longitude": p["longitude"]} for p in pts]}
+@functools.lru_cache(maxsize=1)
+def charger_catalogue():
+    if not config.RUES_JSON.exists():
+        return []
+    return json.loads(config.RUES_JSON.read_text(encoding="utf-8"))["rues"]
 
 
-def _depuis_base(r):
-    """Route créée (base) -> même forme que les routes de départ."""
-    pts = [{"latitude": p["lat"], "longitude": p["lon"]} for p in r.get("points", [])]
-    if not pts:
-        return None
-    return {
-        "id": r["id"], "nom": r["nom"], "origine": "terrain",
+@functools.lru_cache(maxsize=1)
+def statiques():
+    """Routes de départ + catalogue, sans points de terrain."""
+    depart = [{
+        "id": r["id"], "nom": r["nom"], "type": type_de_voie(r["nom"]), "origine": "depart",
         "description": r.get("description", ""),
-        "depart": {"lieu": "Premier point", **pts[0]},
-        "arrivee": {"lieu": "Dernier point", **pts[-1]},
-        "points": pts,
-        "cree_le": r.get("cree_le"),
-    }
+        "reference": [{"latitude": p["latitude"], "longitude": p["longitude"]} for p in (r["depart"], r["arrivee"])],
+    } for r in charger_depart()["routes"]]
+    catalogue = [{"id": r["id"], "nom": r["nom"], "type": r.get("type", type_de_voie(r["nom"])),
+                  "origine": "catalogue", "description": "", "reference": []} for r in charger_catalogue()]
+    return depart + catalogue
 
 
-def liste(rafraichir=False):
-    """Toutes les routes : les 10 de départ puis celles créées (relues au plus toutes les
-    CACHE_ROUTES_S secondes). Si la base est indisponible, seulement les 10 de départ."""
-    depart = [_depuis_json(r) for r in charger_depart()["routes"]]
+def _docs_base(rafraichir=False):
+    """Documents de la base (points de terrain + routes créées), relus au plus toutes les
+    CACHE_ROUTES_S secondes. Base indisponible -> aucun."""
     maintenant = time.monotonic()
-    if rafraichir or _cache["routes"] is None or maintenant - _cache["quand"] > config.CACHE_ROUTES_S:
+    if rafraichir or _cache["docs"] is None or maintenant - _cache["quand"] > config.CACHE_ROUTES_S:
         try:
-            creees = [r for r in map(_depuis_base, stockage.lister_routes_creees()) if r]
+            docs = stockage.lister_routes_creees()
         except stockage.StockageIndisponible:
-            creees = []
-        _cache.update(quand=maintenant, routes=creees)
-    return depart + _cache["routes"]
+            docs = []
+        _cache.update(quand=maintenant, docs=docs)
+    return _cache["docs"]
 
 
 def invalider_cache():
-    _cache["routes"] = None
+    _cache["docs"] = None
+
+
+def statut(nb_points):
+    """Avancement d'une route selon le nombre de points relevés."""
+    return {
+        "nb_points": nb_points,
+        "avancement": round(min(nb_points / config.POINTS_ROUTE_PRETE, 1.0) * 100),
+        "dessinee": nb_points >= config.POINTS_ROUTE_DESSINEE,
+        "etat_disponible": nb_points >= config.POINTS_ETAT_TEMPS_REEL,
+        "prete": nb_points >= config.POINTS_ROUTE_PRETE,
+    }
+
+
+def _points_terrain(doc):
+    return [{"latitude": p["lat"], "longitude": p["lon"]} for p in doc.get("points", [])]
+
+
+def liste(rafraichir=False):
+    """Toutes les routes avec leurs points de terrain et leur avancement.
+    Une rue du catalogue qui porte le même nom qu'une route créée sur le terrain est masquée
+    (la route créée la remplace)."""
+    docs = {d["id"]: d for d in _docs_base(rafraichir)}
+    ids_statiques = {r["id"] for r in statiques()}
+    creees = []
+    for i, d in sorted(docs.items()):
+        if i in ids_statiques or not d.get("points"):
+            continue
+        creees.append({"id": i, "nom": d["nom"], "type": type_de_voie(d["nom"]), "origine": "terrain",
+                       "description": d.get("description", ""), "reference": [], "cree_le": d.get("cree_le")})
+    cles_creees = {cle_nom(r["nom"]) for r in creees}
+    resultat = []
+    for r in list(statiques()) + creees:
+        if r["origine"] == "catalogue" and cle_nom(r["nom"]) in cles_creees:
+            continue
+        pts = _points_terrain(docs.get(r["id"], {}))
+        resultat.append({**r, "points": pts, **statut(len(pts))})
+    return resultat
+
+
+def par_id(numero, routes=None):
+    return next((r for r in (routes or liste()) if r["id"] == numero), None)
 
 
 def prochain_numero_minimum():
+    """Les routes créées sur le terrain sont numérotées après les 10 de départ (11, 12...)."""
     return max(r["id"] for r in charger_depart()["routes"]) + 1
 
 
 # --- Géométrie -------------------------------------------------------------------
+
+def geometrie(route):
+    """Tracé utilisé pour la distance : les points de terrain dès qu'il y en a 2, sinon la
+    ligne de référence (routes de départ), sinon le point unique, sinon rien."""
+    pts = route.get("points", [])
+    if len(pts) >= 2:
+        return pts
+    if route.get("reference"):
+        return route["reference"]
+    return pts
+
 
 def _xy(lat0, lon0, lat, lon):
     """Mètres autour de (lat0, lon0) : x vers l'est, y vers le nord."""
@@ -85,7 +174,9 @@ def _distance_segment(px, py, ax, ay, bx, by):
 
 
 def distance_trace_m(lat, lon, points):
-    """Distance (m) du point au tracé (1 point = distance à ce point)."""
+    """Distance (m) du point au tracé (1 point = distance à ce point ; aucun = infini)."""
+    if not points:
+        return float("inf")
     xy = [_xy(lat, lon, p["latitude"], p["longitude"]) for p in points]
     if len(xy) == 1:
         return math.hypot(*xy[0])
@@ -93,23 +184,29 @@ def distance_trace_m(lat, lon, points):
 
 
 def plus_proche(lat, lon, routes=None):
-    """{"id", "nom", "distance_m", "sur_la_route"} pour la route la plus proche."""
-    r, d = min(((r, distance_trace_m(lat, lon, r["points"])) for r in (routes or liste())),
-               key=lambda t: t[1])
+    """{"id", "nom", "distance_m", "sur_la_route"} pour la route la plus proche parmi celles qui
+    ont une position connue (les rues du catalogue sans point ne peuvent pas être devinées)."""
+    candidates = [(r, distance_trace_m(lat, lon, geometrie(r))) for r in (routes or liste())]
+    candidates = [c for c in candidates if c[1] != float("inf")]
+    if not candidates:
+        return None
+    r, d = min(candidates, key=lambda t: t[1])
     return {"id": r["id"], "nom": r["nom"], "distance_m": round(d),
             "sur_la_route": d <= config.DISTANCE_MAX_ROUTE_M}
 
 
 def milieu(route):
     """Point au milieu du tracé, en longueur (pour une prévision « pour la route »)."""
-    pts = route["points"]
+    pts = geometrie(route)
+    if not pts:
+        return None
     if len(pts) == 1:
         return pts[0]["latitude"], pts[0]["longitude"]
     lat0, lon0 = pts[0]["latitude"], pts[0]["longitude"]
     xy = [_xy(lat0, lon0, p["latitude"], p["longitude"]) for p in pts]
     longueurs = [math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(xy, xy[1:])]
     reste = sum(longueurs) / 2
-    for (a, b), l, pa, pb in zip(zip(xy, xy[1:]), longueurs, pts, pts[1:]):
+    for l, pa, pb in zip(longueurs, pts, pts[1:]):
         if reste <= l and l > 0:
             t = reste / l
             return (pa["latitude"] + t * (pb["latitude"] - pa["latitude"]),
@@ -134,3 +231,28 @@ def inserer_point(points, nouveau):
     choix += [(d(xy[i], o) + d(o, xy[i + 1]) - d(xy[i], xy[i + 1]), i + 1) for i in range(len(xy) - 1)]
     _, position = min(choix)
     return points[:position] + [nouveau] + points[position:]
+
+
+def ajouter_point(numero, point, routes=None):
+    """Ajoute un point relevé à la route `numero` (toute route : départ, catalogue, terrain).
+    Retourne (route mise à jour, ajouté ?) ou (None, False) si la route n'existe pas.
+    Un point à moins de DISTANCE_MIN_ENTRE_POINTS_M d'un point existant n'est pas ajouté."""
+    route = par_id(numero, routes)
+    if route is None:
+        return None, False
+    ajoute = {"fait": False}
+
+    def transformer(points):
+        deja_la = any(distance_trace_m(point["lat"], point["lon"], [{"latitude": p["lat"], "longitude": p["lon"]}])
+                      < config.DISTANCE_MIN_ENTRE_POINTS_M for p in points)
+        if deja_la or len(points) >= config.MAX_POINTS_ROUTE:
+            return points
+        ajoute["fait"] = True
+        return inserer_point(points, point)
+
+    si_absente = {"nom": route["nom"], "origine": route["origine"]}
+    maj = stockage.modifier_points_route(numero, transformer, si_absente=si_absente)
+    invalider_cache()
+    import carte
+    carte.invalider_cache()
+    return maj, ajoute["fait"]

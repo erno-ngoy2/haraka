@@ -272,7 +272,9 @@ def creer_route(doc, id_minimum):
 
         return creer(db.transaction())
     with closing(_sqlite()) as con, con:
-        dernier = con.execute("SELECT MAX(id) FROM routes").fetchone()[0] or 0
+        # seulement les routes créées (11, 12...), pas les rues du catalogue (1001...)
+        dernier = con.execute("SELECT MAX(id) FROM routes WHERE id < ?",
+                              (config.PREMIER_ID_CATALOGUE,)).fetchone()[0] or 0
         numero = max(dernier + 1, id_minimum)
         extra = {k: v for k, v in doc.items() if k not in ("nom", "points")}
         con.execute("INSERT INTO routes (id, nom, points, details) VALUES (?,?,?,?)",
@@ -280,8 +282,11 @@ def creer_route(doc, id_minimum):
     return numero
 
 
-def modifier_points_route(numero, transformer):
-    """Remplace les points de la route par transformer(points). Retourne la route, ou None."""
+def modifier_points_route(numero, transformer, si_absente=None):
+    """Remplace les points de la route par transformer(points). Retourne la route, ou None.
+
+    si_absente : document à créer si la route n'a encore aucun point enregistré (route de
+    départ ou rue du catalogue : leur premier point relevé crée leur document)."""
     if _type_ou_erreur() == "firestore":
         from google.cloud import firestore as gfs
         db = _firestore()
@@ -291,7 +296,11 @@ def modifier_points_route(numero, transformer):
         def modifier(transaction):
             snap = ref.get(transaction=transaction)
             if not snap.exists:
-                return None
+                if si_absente is None:
+                    return None
+                route = {**si_absente, "id": numero, "points": transformer([])}
+                transaction.set(ref, route)
+                return route
             route = snap.to_dict()
             route["points"] = transformer(route.get("points", []))
             transaction.update(ref, {"points": route["points"]})
@@ -301,7 +310,27 @@ def modifier_points_route(numero, transformer):
     with closing(_sqlite()) as con, con:
         ligne = con.execute("SELECT nom, points, details FROM routes WHERE id = ?", (numero,)).fetchone()
         if ligne is None:
-            return None
+            if si_absente is None:
+                return None
+            points = transformer([])
+            extra = {k: v for k, v in si_absente.items() if k not in ("nom", "points")}
+            con.execute("INSERT INTO routes (id, nom, points, details) VALUES (?,?,?,?)",
+                        (numero, si_absente["nom"], json.dumps(points), json.dumps(extra, ensure_ascii=False)))
+            return {**si_absente, "id": numero, "points": points}
         points = transformer(json.loads(ligne[1]))
         con.execute("UPDATE routes SET points = ? WHERE id = ?", (json.dumps(points), numero))
     return {**json.loads(ligne[2] or "{}"), "id": numero, "nom": ligne[0], "points": points}
+
+
+def observations_recentes(depuis):
+    """Observations reçues depuis `depuis` (datetime UTC) : pour l'état en temps réel."""
+    if _type_ou_erreur() == "firestore":
+        from google.cloud.firestore_v1.base_query import FieldFilter
+        docs = (_firestore().collection(config.COLLECTION_OBSERVATIONS)
+                .where(filter=FieldFilter("recu_le", ">=", depuis)).stream())
+        return [d.to_dict() for d in docs]
+    df = lire_observations()
+    if df.empty:
+        return []
+    seuil = depuis.strftime("%Y-%m-%dT%H:%M:%S")
+    return df[df["ts"].astype(str) >= seuil].to_dict("records")

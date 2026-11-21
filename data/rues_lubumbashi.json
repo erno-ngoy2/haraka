@@ -1,0 +1,3006 @@
+{
+ "ville": "Lubumbashi",
+ "sources": [
+  "https://rues-rd-congo.openalfa.com/lubumbashi/liste-rues/",
+  "https://fr-academic.com/dic.nsf/frwiki/2022768"
+ ],
+ "releve_le": "2026-11-21",
+ "note": "Noms seulement : pas de coordonnées. La forme de chaque rue se dessine avec les points relevés sur le terrain depuis l'app.",
+ "rues": [
+  {
+   "id": 1001,
+   "nom": "Rue 10",
+   "type": "rue"
+  },
+  {
+   "id": 1002,
+   "nom": "Rue 11",
+   "type": "rue"
+  },
+  {
+   "id": 1003,
+   "nom": "Rue 12",
+   "type": "rue"
+  },
+  {
+   "id": 1004,
+   "nom": "Rue 13",
+   "type": "rue"
+  },
+  {
+   "id": 1005,
+   "nom": "Avenue du 17 Mai",
+   "type": "avenue"
+  },
+  {
+   "id": 1006,
+   "nom": "Avenue 36 Oiseaux",
+   "type": "avenue"
+  },
+  {
+   "id": 1007,
+   "nom": "Rue 6",
+   "type": "rue"
+  },
+  {
+   "id": 1008,
+   "nom": "Rue 7",
+   "type": "rue"
+  },
+  {
+   "id": 1009,
+   "nom": "Rue 8",
+   "type": "rue"
+  },
+  {
+   "id": 1010,
+   "nom": "Rue 9",
+   "type": "rue"
+  },
+  {
+   "id": 1011,
+   "nom": "Avenue de l'Abbé Kaozi",
+   "type": "avenue"
+  },
+  {
+   "id": 1012,
+   "nom": "Avenue Abbe Kasongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1013,
+   "nom": "Avenue Abc",
+   "type": "avenue"
+  },
+  {
+   "id": 1014,
+   "nom": "Avenue Adoula",
+   "type": "avenue"
+  },
+  {
+   "id": 1015,
+   "nom": "Avenue Afia",
+   "type": "avenue"
+  },
+  {
+   "id": 1016,
+   "nom": "Avenue AG Umba",
+   "type": "avenue"
+  },
+  {
+   "id": 1017,
+   "nom": "Avenue des Aigles",
+   "type": "avenue"
+  },
+  {
+   "id": 1018,
+   "nom": "Avenue Aka",
+   "type": "avenue"
+  },
+  {
+   "id": 1019,
+   "nom": "Avenue Aka bis",
+   "type": "avenue"
+  },
+  {
+   "id": 1020,
+   "nom": "Avenue de l'Alliance",
+   "type": "avenue"
+  },
+  {
+   "id": 1021,
+   "nom": "Avenue Amani",
+   "type": "avenue"
+  },
+  {
+   "id": 1022,
+   "nom": "Avenue Amisi",
+   "type": "avenue"
+  },
+  {
+   "id": 1023,
+   "nom": "Avenue de l'Amitié",
+   "type": "avenue"
+  },
+  {
+   "id": 1024,
+   "nom": "Avenue Anicet",
+   "type": "avenue"
+  },
+  {
+   "id": 1025,
+   "nom": "Avenue Ankoro",
+   "type": "avenue"
+  },
+  {
+   "id": 1026,
+   "nom": "Avenue d'Arden",
+   "type": "avenue"
+  },
+  {
+   "id": 1027,
+   "nom": "Avenue Ariel",
+   "type": "avenue"
+  },
+  {
+   "id": 1028,
+   "nom": "Avenue des As",
+   "type": "avenue"
+  },
+  {
+   "id": 1029,
+   "nom": "Avenue Asifiwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1030,
+   "nom": "Avenue Assante",
+   "type": "avenue"
+  },
+  {
+   "id": 1031,
+   "nom": "Avenue Des Assistants I",
+   "type": "avenue"
+  },
+  {
+   "id": 1032,
+   "nom": "Avenue Des Assistants II",
+   "type": "avenue"
+  },
+  {
+   "id": 1033,
+   "nom": "Avenue Astride",
+   "type": "avenue"
+  },
+  {
+   "id": 1034,
+   "nom": "Avenue des Aviateurs",
+   "type": "avenue"
+  },
+  {
+   "id": 1035,
+   "nom": "Avenue B 52",
+   "type": "avenue"
+  },
+  {
+   "id": 1036,
+   "nom": "Avenue Babemba",
+   "type": "avenue"
+  },
+  {
+   "id": 1037,
+   "nom": "Avenue Bakakwanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1038,
+   "nom": "Avenue Bakanja Isidore",
+   "type": "avenue"
+  },
+  {
+   "id": 1039,
+   "nom": "Avenue Balamba",
+   "type": "avenue"
+  },
+  {
+   "id": 1040,
+   "nom": "Avenue Balnière",
+   "type": "avenue"
+  },
+  {
+   "id": 1041,
+   "nom": "Avenue Baluba",
+   "type": "avenue"
+  },
+  {
+   "id": 1042,
+   "nom": "Avenue le Bambi",
+   "type": "avenue"
+  },
+  {
+   "id": 1043,
+   "nom": "Avenue Baraka",
+   "type": "avenue"
+  },
+  {
+   "id": 1044,
+   "nom": "Avenue le Barbi",
+   "type": "avenue"
+  },
+  {
+   "id": 1045,
+   "nom": "Avenue Barclays",
+   "type": "avenue"
+  },
+  {
+   "id": 1046,
+   "nom": "Avenue Basanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1047,
+   "nom": "Avenue Basantu",
+   "type": "avenue"
+  },
+  {
+   "id": 1048,
+   "nom": "Avenue Basongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1049,
+   "nom": "Avenue du Bassin",
+   "type": "avenue"
+  },
+  {
+   "id": 1050,
+   "nom": "Avenue Batiste",
+   "type": "avenue"
+  },
+  {
+   "id": 1051,
+   "nom": "Avenue Les Battants",
+   "type": "avenue"
+  },
+  {
+   "id": 1052,
+   "nom": "Avenue Bayukita",
+   "type": "avenue"
+  },
+  {
+   "id": 1053,
+   "nom": "Avenue Bemba Mwiba",
+   "type": "avenue"
+  },
+  {
+   "id": 1054,
+   "nom": "Avenue Beryl",
+   "type": "avenue"
+  },
+  {
+   "id": 1055,
+   "nom": "Avenue Biayi",
+   "type": "avenue"
+  },
+  {
+   "id": 1056,
+   "nom": "Avenue Bien Aimés",
+   "type": "avenue"
+  },
+  {
+   "id": 1057,
+   "nom": "Avenue Biyayi",
+   "type": "avenue"
+  },
+  {
+   "id": 1058,
+   "nom": "Avenue Bonzele",
+   "type": "avenue"
+  },
+  {
+   "id": 1059,
+   "nom": "Avenue Bosanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1060,
+   "nom": "Avenue Boya",
+   "type": "avenue"
+  },
+  {
+   "id": 1061,
+   "nom": "Avenue des Briquetiers",
+   "type": "avenue"
+  },
+  {
+   "id": 1062,
+   "nom": "Avenue Bukama",
+   "type": "avenue"
+  },
+  {
+   "id": 1063,
+   "nom": "Avenue Bukavu",
+   "type": "avenue"
+  },
+  {
+   "id": 1064,
+   "nom": "Avenue Bula",
+   "type": "avenue"
+  },
+  {
+   "id": 1065,
+   "nom": "Avenue Bulaya I",
+   "type": "avenue"
+  },
+  {
+   "id": 1066,
+   "nom": "Avenue Bulaya II",
+   "type": "avenue"
+  },
+  {
+   "id": 1067,
+   "nom": "Avenue de Bunkeya",
+   "type": "avenue"
+  },
+  {
+   "id": 1068,
+   "nom": "Avenue Butuku",
+   "type": "avenue"
+  },
+  {
+   "id": 1069,
+   "nom": "Avenue du Cadastre",
+   "type": "avenue"
+  },
+  {
+   "id": 1070,
+   "nom": "Avenue du Camp",
+   "type": "avenue"
+  },
+  {
+   "id": 1071,
+   "nom": "Avenue Du Camp I",
+   "type": "avenue"
+  },
+  {
+   "id": 1072,
+   "nom": "Avenue Du Camp II",
+   "type": "avenue"
+  },
+  {
+   "id": 1073,
+   "nom": "Avenue Camp Misepe",
+   "type": "avenue"
+  },
+  {
+   "id": 1074,
+   "nom": "Avenue du Camp prolongée",
+   "type": "avenue"
+  },
+  {
+   "id": 1075,
+   "nom": "Avenue du Canal",
+   "type": "avenue"
+  },
+  {
+   "id": 1076,
+   "nom": "Avenue Capitaine Kawel",
+   "type": "avenue"
+  },
+  {
+   "id": 1077,
+   "nom": "Avenue Capitaine Mukena",
+   "type": "avenue"
+  },
+  {
+   "id": 1078,
+   "nom": "Avenue du Carmel",
+   "type": "avenue"
+  },
+  {
+   "id": 1079,
+   "nom": "Avenue Cascade",
+   "type": "avenue"
+  },
+  {
+   "id": 1080,
+   "nom": "Avenue de la Cassiterite",
+   "type": "avenue"
+  },
+  {
+   "id": 1081,
+   "nom": "Avenue Centrale",
+   "type": "avenue"
+  },
+  {
+   "id": 1082,
+   "nom": "Avenue Cesar",
+   "type": "avenue"
+  },
+  {
+   "id": 1083,
+   "nom": "Avenue Champ du Potier",
+   "type": "avenue"
+  },
+  {
+   "id": 1084,
+   "nom": "Avenue Changalele II",
+   "type": "avenue"
+  },
+  {
+   "id": 1085,
+   "nom": "Avenue Changalele III",
+   "type": "avenue"
+  },
+  {
+   "id": 1086,
+   "nom": "Avenue du Chef Katanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1087,
+   "nom": "Avenue Chef Kenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1088,
+   "nom": "Avenue Chem-Chem",
+   "type": "avenue"
+  },
+  {
+   "id": 1089,
+   "nom": "Avenue des Chercheurs",
+   "type": "avenue"
+  },
+  {
+   "id": 1090,
+   "nom": "Avenue Chokwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1091,
+   "nom": "Avenue Chuma",
+   "type": "avenue"
+  },
+  {
+   "id": 1092,
+   "nom": "Avenue Chute Lofoi",
+   "type": "avenue"
+  },
+  {
+   "id": 1093,
+   "nom": "Avenue des Chutes",
+   "type": "avenue"
+  },
+  {
+   "id": 1094,
+   "nom": "Avenue de Cimetière",
+   "type": "avenue"
+  },
+  {
+   "id": 1095,
+   "nom": "Avenue Circulaire",
+   "type": "avenue"
+  },
+  {
+   "id": 1096,
+   "nom": "Avenue du Club Nautique",
+   "type": "avenue"
+  },
+  {
+   "id": 1097,
+   "nom": "Avenue du Cobalt",
+   "type": "avenue"
+  },
+  {
+   "id": 1098,
+   "nom": "Avenue du Collège",
+   "type": "avenue"
+  },
+  {
+   "id": 1099,
+   "nom": "Avenue de la Colline",
+   "type": "avenue"
+  },
+  {
+   "id": 1100,
+   "nom": "Avenue la Colombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1101,
+   "nom": "Avenue Colonel Kasongo Nongolola",
+   "type": "avenue"
+  },
+  {
+   "id": 1102,
+   "nom": "Avenue Colonel Muzimba",
+   "type": "avenue"
+  },
+  {
+   "id": 1103,
+   "nom": "Avenue Colonel Ndumba",
+   "type": "avenue"
+  },
+  {
+   "id": 1104,
+   "nom": "Avenue du Congo",
+   "type": "avenue"
+  },
+  {
+   "id": 1105,
+   "nom": "Rue Congo",
+   "type": "rue"
+  },
+  {
+   "id": 1106,
+   "nom": "Avenue Congo Motor",
+   "type": "avenue"
+  },
+  {
+   "id": 1107,
+   "nom": "Avenue du Conservateur",
+   "type": "avenue"
+  },
+  {
+   "id": 1108,
+   "nom": "Route de contournement",
+   "type": "route"
+  },
+  {
+   "id": 1109,
+   "nom": "Avenue Cosma Shungu",
+   "type": "avenue"
+  },
+  {
+   "id": 1110,
+   "nom": "Avenue du Couvent",
+   "type": "avenue"
+  },
+  {
+   "id": 1111,
+   "nom": "Avenue du Cuivre",
+   "type": "avenue"
+  },
+  {
+   "id": 1112,
+   "nom": "Avenue du Depôt",
+   "type": "avenue"
+  },
+  {
+   "id": 1113,
+   "nom": "Avenue des Deux Vérités",
+   "type": "avenue"
+  },
+  {
+   "id": 1114,
+   "nom": "Avenue Dibathay",
+   "type": "avenue"
+  },
+  {
+   "id": 1115,
+   "nom": "Avenue de la Digue",
+   "type": "avenue"
+  },
+  {
+   "id": 1116,
+   "nom": "Avenue Dikuku",
+   "type": "avenue"
+  },
+  {
+   "id": 1117,
+   "nom": "Avenue Dikuluwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1118,
+   "nom": "Avenue Dikuyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1119,
+   "nom": "Avenue Dilolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1120,
+   "nom": "Avenue Dilolo bis",
+   "type": "avenue"
+  },
+  {
+   "id": 1121,
+   "nom": "Avenue Ditu",
+   "type": "avenue"
+  },
+  {
+   "id": 1122,
+   "nom": "Avenue Djoka",
+   "type": "avenue"
+  },
+  {
+   "id": 1123,
+   "nom": "Avenue Dolbin Mwamba",
+   "type": "avenue"
+  },
+  {
+   "id": 1124,
+   "nom": "Avenue Dominique",
+   "type": "avenue"
+  },
+  {
+   "id": 1125,
+   "nom": "Avenue Double Poteau",
+   "type": "avenue"
+  },
+  {
+   "id": 1126,
+   "nom": "Avenue Duga Kubetero",
+   "type": "avenue"
+  },
+  {
+   "id": 1127,
+   "nom": "Avenue Dur",
+   "type": "avenue"
+  },
+  {
+   "id": 1128,
+   "nom": "Avenue des Ecoles",
+   "type": "avenue"
+  },
+  {
+   "id": 1129,
+   "nom": "Avenue de L'Eglise",
+   "type": "avenue"
+  },
+  {
+   "id": 1130,
+   "nom": "Avenue des Eglises",
+   "type": "avenue"
+  },
+  {
+   "id": 1131,
+   "nom": "Avenue de l'Eléphant",
+   "type": "avenue"
+  },
+  {
+   "id": 1132,
+   "nom": "Avenue Elie Minda",
+   "type": "avenue"
+  },
+  {
+   "id": 1133,
+   "nom": "Avenue des Elites",
+   "type": "avenue"
+  },
+  {
+   "id": 1134,
+   "nom": "Avenue Emaus",
+   "type": "avenue"
+  },
+  {
+   "id": 1135,
+   "nom": "Avenue de l'Energie",
+   "type": "avenue"
+  },
+  {
+   "id": 1136,
+   "nom": "Avenue de l'Energie II",
+   "type": "avenue"
+  },
+  {
+   "id": 1137,
+   "nom": "Avenue de l'est",
+   "type": "avenue"
+  },
+  {
+   "id": 1138,
+   "nom": "Avenue de l'Étain",
+   "type": "avenue"
+  },
+  {
+   "id": 1139,
+   "nom": "Avenue des Etoiles",
+   "type": "avenue"
+  },
+  {
+   "id": 1140,
+   "nom": "Avenue de l'Evangile",
+   "type": "avenue"
+  },
+  {
+   "id": 1141,
+   "nom": "Avenue Fatuma",
+   "type": "avenue"
+  },
+  {
+   "id": 1142,
+   "nom": "Avenue des Femmes Katangaises",
+   "type": "avenue"
+  },
+  {
+   "id": 1143,
+   "nom": "Avenue Fene",
+   "type": "avenue"
+  },
+  {
+   "id": 1144,
+   "nom": "Avenue Fleuve Congo",
+   "type": "avenue"
+  },
+  {
+   "id": 1145,
+   "nom": "Avenue des Fondeurs",
+   "type": "avenue"
+  },
+  {
+   "id": 1146,
+   "nom": "Avenue du Foyer",
+   "type": "avenue"
+  },
+  {
+   "id": 1147,
+   "nom": "Avenue du Foyer Penga Penga",
+   "type": "avenue"
+  },
+  {
+   "id": 1148,
+   "nom": "Avenue Fungurume",
+   "type": "avenue"
+  },
+  {
+   "id": 1149,
+   "nom": "Avenue Gabi",
+   "type": "avenue"
+  },
+  {
+   "id": 1150,
+   "nom": "Avenue du Gambela",
+   "type": "avenue"
+  },
+  {
+   "id": 1151,
+   "nom": "Avenue de Garage",
+   "type": "avenue"
+  },
+  {
+   "id": 1152,
+   "nom": "Avenue Gbadolite",
+   "type": "avenue"
+  },
+  {
+   "id": 1153,
+   "nom": "Avenue Ghylain Yumba",
+   "type": "avenue"
+  },
+  {
+   "id": 1154,
+   "nom": "Avenue de la Gloire",
+   "type": "avenue"
+  },
+  {
+   "id": 1155,
+   "nom": "Avenue de la Gloire Bis",
+   "type": "avenue"
+  },
+  {
+   "id": 1156,
+   "nom": "Route du Golf",
+   "type": "route"
+  },
+  {
+   "id": 1157,
+   "nom": "Avenue de la Grâce",
+   "type": "avenue"
+  },
+  {
+   "id": 1158,
+   "nom": "Avenue la Grâce 2",
+   "type": "avenue"
+  },
+  {
+   "id": 1159,
+   "nom": "Avenue Haute Tension",
+   "type": "avenue"
+  },
+  {
+   "id": 1160,
+   "nom": "Avenue Haut Katanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1161,
+   "nom": "Avenue Idiofa",
+   "type": "avenue"
+  },
+  {
+   "id": 1162,
+   "nom": "Avenue Ilunga",
+   "type": "avenue"
+  },
+  {
+   "id": 1163,
+   "nom": "Avenue Ilunga Ndala",
+   "type": "avenue"
+  },
+  {
+   "id": 1164,
+   "nom": "Avenue Imara",
+   "type": "avenue"
+  },
+  {
+   "id": 1165,
+   "nom": "Avenue In Mazaz",
+   "type": "avenue"
+  },
+  {
+   "id": 1166,
+   "nom": "Avenue de l'internat",
+   "type": "avenue"
+  },
+  {
+   "id": 1167,
+   "nom": "Avenue Isangila",
+   "type": "avenue"
+  },
+  {
+   "id": 1168,
+   "nom": "Avenue Jacob",
+   "type": "avenue"
+  },
+  {
+   "id": 1169,
+   "nom": "Avenue Jimmy Kazembe",
+   "type": "avenue"
+  },
+  {
+   "id": 1170,
+   "nom": "Avenue John Seya",
+   "type": "avenue"
+  },
+  {
+   "id": 1171,
+   "nom": "Avenue Jourdain",
+   "type": "avenue"
+  },
+  {
+   "id": 1172,
+   "nom": "Avenue de la Justice",
+   "type": "avenue"
+  },
+  {
+   "id": 1173,
+   "nom": "Avenue Kabalo",
+   "type": "avenue"
+  },
+  {
+   "id": 1174,
+   "nom": "Avenue Kabalo II",
+   "type": "avenue"
+  },
+  {
+   "id": 1175,
+   "nom": "Avenue Kabamb",
+   "type": "avenue"
+  },
+  {
+   "id": 1176,
+   "nom": "Avenue Kabamba",
+   "type": "avenue"
+  },
+  {
+   "id": 1177,
+   "nom": "Avenue Kabanza",
+   "type": "avenue"
+  },
+  {
+   "id": 1178,
+   "nom": "Avenue Kabayo",
+   "type": "avenue"
+  },
+  {
+   "id": 1179,
+   "nom": "Avenue Kabolela",
+   "type": "avenue"
+  },
+  {
+   "id": 1180,
+   "nom": "Avenue Kabongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1181,
+   "nom": "Avenue Kabongo Ngoy",
+   "type": "avenue"
+  },
+  {
+   "id": 1182,
+   "nom": "Avenue Kabulo",
+   "type": "avenue"
+  },
+  {
+   "id": 1183,
+   "nom": "Avenue Kabuya",
+   "type": "avenue"
+  },
+  {
+   "id": 1184,
+   "nom": "Avenue Kabuyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1185,
+   "nom": "Avenue Kabwekatanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1186,
+   "nom": "Avenue Kabwit",
+   "type": "avenue"
+  },
+  {
+   "id": 1187,
+   "nom": "Avenue Kafubu",
+   "type": "avenue"
+  },
+  {
+   "id": 1188,
+   "nom": "Avenue Kafwankumba",
+   "type": "avenue"
+  },
+  {
+   "id": 1189,
+   "nom": "Avenue Kahasha Mwenze",
+   "type": "avenue"
+  },
+  {
+   "id": 1190,
+   "nom": "Avenue Kahembwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1191,
+   "nom": "Avenue Kahozi",
+   "type": "avenue"
+  },
+  {
+   "id": 1192,
+   "nom": "Avenue Kahumba",
+   "type": "avenue"
+  },
+  {
+   "id": 1193,
+   "nom": "Avenue Kahutu",
+   "type": "avenue"
+  },
+  {
+   "id": 1194,
+   "nom": "Avenue Kakanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1195,
+   "nom": "Avenue Kakontwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1196,
+   "nom": "Avenue Kakudji",
+   "type": "avenue"
+  },
+  {
+   "id": 1197,
+   "nom": "Avenue Kalani",
+   "type": "avenue"
+  },
+  {
+   "id": 1198,
+   "nom": "Avenue Kalemie",
+   "type": "avenue"
+  },
+  {
+   "id": 1199,
+   "nom": "Avenue Kalenga",
+   "type": "avenue"
+  },
+  {
+   "id": 1200,
+   "nom": "Avenue Kalombo",
+   "type": "avenue"
+  },
+  {
+   "id": 1201,
+   "nom": "Avenue Kalubi",
+   "type": "avenue"
+  },
+  {
+   "id": 1202,
+   "nom": "Avenue Kalubwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1203,
+   "nom": "Avenue Kalulaku",
+   "type": "avenue"
+  },
+  {
+   "id": 1204,
+   "nom": "Avenue Kalumba",
+   "type": "avenue"
+  },
+  {
+   "id": 1205,
+   "nom": "Avenue Kalyibo",
+   "type": "avenue"
+  },
+  {
+   "id": 1206,
+   "nom": "Avenue Kamale",
+   "type": "avenue"
+  },
+  {
+   "id": 1207,
+   "nom": "Avenue Kamalenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1208,
+   "nom": "Avenue Kamalondo",
+   "type": "avenue"
+  },
+  {
+   "id": 1209,
+   "nom": "Avenue Kamanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1210,
+   "nom": "Avenue Kamaska",
+   "type": "avenue"
+  },
+  {
+   "id": 1211,
+   "nom": "Avenue de Kambove",
+   "type": "avenue"
+  },
+  {
+   "id": 1212,
+   "nom": "Avenue Kambu",
+   "type": "avenue"
+  },
+  {
+   "id": 1213,
+   "nom": "Avenue Kamina",
+   "type": "avenue"
+  },
+  {
+   "id": 1214,
+   "nom": "Avenue Kaminungu I",
+   "type": "avenue"
+  },
+  {
+   "id": 1215,
+   "nom": "Avenue Kaminungu II",
+   "type": "avenue"
+  },
+  {
+   "id": 1216,
+   "nom": "Avenue Kaminungu III",
+   "type": "avenue"
+  },
+  {
+   "id": 1217,
+   "nom": "Avenue Kamoto",
+   "type": "avenue"
+  },
+  {
+   "id": 1218,
+   "nom": "Avenue Kanama",
+   "type": "avenue"
+  },
+  {
+   "id": 1219,
+   "nom": "Avenue Kananga",
+   "type": "avenue"
+  },
+  {
+   "id": 1220,
+   "nom": "Avenue Kanda Kanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1221,
+   "nom": "Avenue Kandolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1222,
+   "nom": "Avenue Kangele",
+   "type": "avenue"
+  },
+  {
+   "id": 1223,
+   "nom": "Avenue Kaniama",
+   "type": "avenue"
+  },
+  {
+   "id": 1224,
+   "nom": "Avenue Kansele",
+   "type": "avenue"
+  },
+  {
+   "id": 1225,
+   "nom": "Avenue Kanyama",
+   "type": "avenue"
+  },
+  {
+   "id": 1226,
+   "nom": "Avenue Kapanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1227,
+   "nom": "Avenue Kapele",
+   "type": "avenue"
+  },
+  {
+   "id": 1228,
+   "nom": "Avenue Kapenda",
+   "type": "avenue"
+  },
+  {
+   "id": 1229,
+   "nom": "Avenue Kapenta",
+   "type": "avenue"
+  },
+  {
+   "id": 1230,
+   "nom": "Avenue Kapindula",
+   "type": "avenue"
+  },
+  {
+   "id": 1231,
+   "nom": "Avenue Kapolowe",
+   "type": "avenue"
+  },
+  {
+   "id": 1232,
+   "nom": "Avenue Kaponda",
+   "type": "avenue"
+  },
+  {
+   "id": 1233,
+   "nom": "Avenue Kapopola",
+   "type": "avenue"
+  },
+  {
+   "id": 1234,
+   "nom": "Avenue Kapweta",
+   "type": "avenue"
+  },
+  {
+   "id": 1235,
+   "nom": "Avenue Karavia",
+   "type": "avenue"
+  },
+  {
+   "id": 1236,
+   "nom": "Route de la Karavia",
+   "type": "route"
+  },
+  {
+   "id": 1237,
+   "nom": "Avenue du Kasai",
+   "type": "avenue"
+  },
+  {
+   "id": 1238,
+   "nom": "Avenue Kasangulu",
+   "type": "avenue"
+  },
+  {
+   "id": 1239,
+   "nom": "Route Kasapa",
+   "type": "route"
+  },
+  {
+   "id": 1240,
+   "nom": "Avenue Kaseba",
+   "type": "avenue"
+  },
+  {
+   "id": 1241,
+   "nom": "Avenue Kasende",
+   "type": "avenue"
+  },
+  {
+   "id": 1242,
+   "nom": "Chaussée de Kasenga",
+   "type": "chaussée"
+  },
+  {
+   "id": 1243,
+   "nom": "Avenue Kasese",
+   "type": "avenue"
+  },
+  {
+   "id": 1244,
+   "nom": "Avenue Kashobwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1245,
+   "nom": "Avenue Kasisa",
+   "type": "avenue"
+  },
+  {
+   "id": 1246,
+   "nom": "Avenue Kasombo",
+   "type": "avenue"
+  },
+  {
+   "id": 1247,
+   "nom": "Avenue Kasongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1248,
+   "nom": "Avenue Kasongo Micheline",
+   "type": "avenue"
+  },
+  {
+   "id": 1249,
+   "nom": "Avenue Kasongo-Nyembo",
+   "type": "avenue"
+  },
+  {
+   "id": 1250,
+   "nom": "Avenue Kasumbalesa",
+   "type": "avenue"
+  },
+  {
+   "id": 1251,
+   "nom": "Avenue Katamea",
+   "type": "avenue"
+  },
+  {
+   "id": 1252,
+   "nom": "Avenue Katanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1253,
+   "nom": "Avenue du Katanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1254,
+   "nom": "Avenue Katembo Adolphine",
+   "type": "avenue"
+  },
+  {
+   "id": 1255,
+   "nom": "Avenue Katuba",
+   "type": "avenue"
+  },
+  {
+   "id": 1256,
+   "nom": "Boulevard de la Katuba",
+   "type": "boulevard"
+  },
+  {
+   "id": 1257,
+   "nom": "Avenue Kaya",
+   "type": "avenue"
+  },
+  {
+   "id": 1258,
+   "nom": "Avenue Kayembe",
+   "type": "avenue"
+  },
+  {
+   "id": 1259,
+   "nom": "Avenue Kayumba Ngolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1260,
+   "nom": "Avenue Kazadi",
+   "type": "avenue"
+  },
+  {
+   "id": 1261,
+   "nom": "Avenue Kazadi bis",
+   "type": "avenue"
+  },
+  {
+   "id": 1262,
+   "nom": "Rue Kazumba",
+   "type": "rue"
+  },
+  {
+   "id": 1263,
+   "nom": "Avenue Kenda Biela",
+   "type": "avenue"
+  },
+  {
+   "id": 1264,
+   "nom": "Avenue Kenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1265,
+   "nom": "Avenue Kiambi",
+   "type": "avenue"
+  },
+  {
+   "id": 1266,
+   "nom": "Avenue Kibali",
+   "type": "avenue"
+  },
+  {
+   "id": 1267,
+   "nom": "Avenue Kiboko",
+   "type": "avenue"
+  },
+  {
+   "id": 1268,
+   "nom": "Avenue Kidicho",
+   "type": "avenue"
+  },
+  {
+   "id": 1269,
+   "nom": "Avenue Kifufula",
+   "type": "avenue"
+  },
+  {
+   "id": 1270,
+   "nom": "Avenue Kikas",
+   "type": "avenue"
+  },
+  {
+   "id": 1271,
+   "nom": "Avenue Kilela Balanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1272,
+   "nom": "Avenue Kilengwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1273,
+   "nom": "Avenue Kilimanjaro",
+   "type": "avenue"
+  },
+  {
+   "id": 1274,
+   "nom": "Boulevard de Kilwa",
+   "type": "boulevard"
+  },
+  {
+   "id": 1275,
+   "nom": "Avenue Kimba",
+   "type": "avenue"
+  },
+  {
+   "id": 1276,
+   "nom": "Avenue Kimba Kasongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1277,
+   "nom": "Avenue Kimpinde",
+   "type": "avenue"
+  },
+  {
+   "id": 1278,
+   "nom": "Avenue Kingombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1279,
+   "nom": "Avenue Kinkonja",
+   "type": "avenue"
+  },
+  {
+   "id": 1280,
+   "nom": "Avenue Kinshasa",
+   "type": "avenue"
+  },
+  {
+   "id": 1281,
+   "nom": "Avenue Kipopo",
+   "type": "avenue"
+  },
+  {
+   "id": 1282,
+   "nom": "Route Kipopo",
+   "type": "route"
+  },
+  {
+   "id": 1283,
+   "nom": "Avenue Kipoyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1284,
+   "nom": "Avenue Kipuluka",
+   "type": "avenue"
+  },
+  {
+   "id": 1285,
+   "nom": "Route de Kipushi",
+   "type": "route"
+  },
+  {
+   "id": 1286,
+   "nom": "Avenue Kisale",
+   "type": "avenue"
+  },
+  {
+   "id": 1287,
+   "nom": "Avenue de Kisambi",
+   "type": "avenue"
+  },
+  {
+   "id": 1288,
+   "nom": "Avenue Kisanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1289,
+   "nom": "Avenue Kisimba",
+   "type": "avenue"
+  },
+  {
+   "id": 1290,
+   "nom": "Avenue Kitalo",
+   "type": "avenue"
+  },
+  {
+   "id": 1291,
+   "nom": "Avenue Kitenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1292,
+   "nom": "Rue Kitenge",
+   "type": "rue"
+  },
+  {
+   "id": 1293,
+   "nom": "Avenue Kolwezi",
+   "type": "avenue"
+  },
+  {
+   "id": 1294,
+   "nom": "Avenue Kongolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1295,
+   "nom": "Avenue de Koni",
+   "type": "avenue"
+  },
+  {
+   "id": 1296,
+   "nom": "Avenue Koyagialo",
+   "type": "avenue"
+  },
+  {
+   "id": 1297,
+   "nom": "Avenue Kundelungu",
+   "type": "avenue"
+  },
+  {
+   "id": 1298,
+   "nom": "Avenue Kyalu",
+   "type": "avenue"
+  },
+  {
+   "id": 1299,
+   "nom": "Avenue Laboratoire",
+   "type": "avenue"
+  },
+  {
+   "id": 1300,
+   "nom": "Avenue du Lac",
+   "type": "avenue"
+  },
+  {
+   "id": 1301,
+   "nom": "Avenue du Lac Changalele",
+   "type": "avenue"
+  },
+  {
+   "id": 1302,
+   "nom": "Avenue du Lac Kipopo",
+   "type": "avenue"
+  },
+  {
+   "id": 1303,
+   "nom": "Avenue Lac Kipopo II",
+   "type": "avenue"
+  },
+  {
+   "id": 1304,
+   "nom": "Avenue Lac Kivu",
+   "type": "avenue"
+  },
+  {
+   "id": 1305,
+   "nom": "Avenue Lac Murung",
+   "type": "avenue"
+  },
+  {
+   "id": 1306,
+   "nom": "Avenue Lemera",
+   "type": "avenue"
+  },
+  {
+   "id": 1307,
+   "nom": "Avenue Libermann",
+   "type": "avenue"
+  },
+  {
+   "id": 1308,
+   "nom": "Avenue Lidjo",
+   "type": "avenue"
+  },
+  {
+   "id": 1309,
+   "nom": "Avenue de Likasi",
+   "type": "avenue"
+  },
+  {
+   "id": 1310,
+   "nom": "Route de Likasi",
+   "type": "route"
+  },
+  {
+   "id": 1311,
+   "nom": "Avenue Liliane",
+   "type": "avenue"
+  },
+  {
+   "id": 1312,
+   "nom": "Avenue Lipu",
+   "type": "avenue"
+  },
+  {
+   "id": 1313,
+   "nom": "Avenue Lofoi",
+   "type": "avenue"
+  },
+  {
+   "id": 1314,
+   "nom": "Avenue de la Loi",
+   "type": "avenue"
+  },
+  {
+   "id": 1315,
+   "nom": "Avenue du Lomami",
+   "type": "avenue"
+  },
+  {
+   "id": 1316,
+   "nom": "Avenue Lombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1317,
+   "nom": "Avenue Longanja",
+   "type": "avenue"
+  },
+  {
+   "id": 1318,
+   "nom": "Avenue Longanja Guy",
+   "type": "avenue"
+  },
+  {
+   "id": 1319,
+   "nom": "Avenue Lualaba",
+   "type": "avenue"
+  },
+  {
+   "id": 1320,
+   "nom": "Avenue Luapi",
+   "type": "avenue"
+  },
+  {
+   "id": 1321,
+   "nom": "Avenue Luapula",
+   "type": "avenue"
+  },
+  {
+   "id": 1322,
+   "nom": "Avenue Lubefu",
+   "type": "avenue"
+  },
+  {
+   "id": 1323,
+   "nom": "Avenue Lubembe",
+   "type": "avenue"
+  },
+  {
+   "id": 1324,
+   "nom": "Avenue Lubiayi",
+   "type": "avenue"
+  },
+  {
+   "id": 1325,
+   "nom": "Avenue du Lubilashi",
+   "type": "avenue"
+  },
+  {
+   "id": 1326,
+   "nom": "Avenue Lubilashi prolongée",
+   "type": "avenue"
+  },
+  {
+   "id": 1327,
+   "nom": "Avenue Lubudi",
+   "type": "avenue"
+  },
+  {
+   "id": 1328,
+   "nom": "Avenue de la Lubumbashi",
+   "type": "avenue"
+  },
+  {
+   "id": 1329,
+   "nom": "Avenue Luebo",
+   "type": "avenue"
+  },
+  {
+   "id": 1330,
+   "nom": "Avenue Luena",
+   "type": "avenue"
+  },
+  {
+   "id": 1331,
+   "nom": "Avenue de la Lufira",
+   "type": "avenue"
+  },
+  {
+   "id": 1332,
+   "nom": "Avenue Lufungula",
+   "type": "avenue"
+  },
+  {
+   "id": 1333,
+   "nom": "Avenue Luhata",
+   "type": "avenue"
+  },
+  {
+   "id": 1334,
+   "nom": "Avenue Lukafu",
+   "type": "avenue"
+  },
+  {
+   "id": 1335,
+   "nom": "Avenue Lukama",
+   "type": "avenue"
+  },
+  {
+   "id": 1336,
+   "nom": "Avenue Lukonzolwa",
+   "type": "avenue"
+  },
+  {
+   "id": 1337,
+   "nom": "Avenue Lulua",
+   "type": "avenue"
+  },
+  {
+   "id": 1338,
+   "nom": "Avenue Lulua 1",
+   "type": "avenue"
+  },
+  {
+   "id": 1339,
+   "nom": "Avenue Lulua 2",
+   "type": "avenue"
+  },
+  {
+   "id": 1340,
+   "nom": "Avenue de la Lumière",
+   "type": "avenue"
+  },
+  {
+   "id": 1341,
+   "nom": "Avenue Lumpungu",
+   "type": "avenue"
+  },
+  {
+   "id": 1342,
+   "nom": "Avenue Lundula",
+   "type": "avenue"
+  },
+  {
+   "id": 1343,
+   "nom": "Avenue Lupembe",
+   "type": "avenue"
+  },
+  {
+   "id": 1344,
+   "nom": "Avenue Lusambilo",
+   "type": "avenue"
+  },
+  {
+   "id": 1345,
+   "nom": "Avenue Lusambo",
+   "type": "avenue"
+  },
+  {
+   "id": 1346,
+   "nom": "Avenue Luvungi",
+   "type": "avenue"
+  },
+  {
+   "id": 1347,
+   "nom": "Avenue du Luvwa",
+   "type": "avenue"
+  },
+  {
+   "id": 1348,
+   "nom": "Avenue Ma Campagne",
+   "type": "avenue"
+  },
+  {
+   "id": 1349,
+   "nom": "Avenue Mafuta",
+   "type": "avenue"
+  },
+  {
+   "id": 1350,
+   "nom": "Avenue Magistrat Kakudji",
+   "type": "avenue"
+  },
+  {
+   "id": 1351,
+   "nom": "Avenue Magnetisme",
+   "type": "avenue"
+  },
+  {
+   "id": 1352,
+   "nom": "Avenue Maïsha",
+   "type": "avenue"
+  },
+  {
+   "id": 1353,
+   "nom": "Avenue Major Guy Kalend",
+   "type": "avenue"
+  },
+  {
+   "id": 1354,
+   "nom": "Avenue Major Vangu",
+   "type": "avenue"
+  },
+  {
+   "id": 1355,
+   "nom": "Avenue Makwarunzu",
+   "type": "avenue"
+  },
+  {
+   "id": 1356,
+   "nom": "Avenue Malemba Nkulu",
+   "type": "avenue"
+  },
+  {
+   "id": 1357,
+   "nom": "Avenue Maman Banza",
+   "type": "avenue"
+  },
+  {
+   "id": 1358,
+   "nom": "Avenue Maman Ilunga",
+   "type": "avenue"
+  },
+  {
+   "id": 1359,
+   "nom": "Avenue Maman Misakabu",
+   "type": "avenue"
+  },
+  {
+   "id": 1360,
+   "nom": "Avenue Maman Saïdi",
+   "type": "avenue"
+  },
+  {
+   "id": 1361,
+   "nom": "Avenue Mampala",
+   "type": "avenue"
+  },
+  {
+   "id": 1362,
+   "nom": "Avenue Mandungu",
+   "type": "avenue"
+  },
+  {
+   "id": 1363,
+   "nom": "Avenue Mangue",
+   "type": "avenue"
+  },
+  {
+   "id": 1364,
+   "nom": "Avenue du Maniema",
+   "type": "avenue"
+  },
+  {
+   "id": 1365,
+   "nom": "Avenue Manika",
+   "type": "avenue"
+  },
+  {
+   "id": 1366,
+   "nom": "Avenue Manyonya Grand Baobab",
+   "type": "avenue"
+  },
+  {
+   "id": 1367,
+   "nom": "Avenue Mapendo",
+   "type": "avenue"
+  },
+  {
+   "id": 1368,
+   "nom": "Avenue Marcel Nsenga",
+   "type": "avenue"
+  },
+  {
+   "id": 1369,
+   "nom": "Avenue du Marché",
+   "type": "avenue"
+  },
+  {
+   "id": 1370,
+   "nom": "Avenue Matadi",
+   "type": "avenue"
+  },
+  {
+   "id": 1371,
+   "nom": "Avenue De La Maternite",
+   "type": "avenue"
+  },
+  {
+   "id": 1372,
+   "nom": "Avenue Matobo",
+   "type": "avenue"
+  },
+  {
+   "id": 1373,
+   "nom": "Avenue Mbandaka",
+   "type": "avenue"
+  },
+  {
+   "id": 1374,
+   "nom": "Avenue Mbayo",
+   "type": "avenue"
+  },
+  {
+   "id": 1375,
+   "nom": "Avenue Mbayo 2",
+   "type": "avenue"
+  },
+  {
+   "id": 1376,
+   "nom": "Avenue Mbomb",
+   "type": "avenue"
+  },
+  {
+   "id": 1377,
+   "nom": "Avenue Mbombo Kasongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1378,
+   "nom": "Rue Mbunda",
+   "type": "rue"
+  },
+  {
+   "id": 1379,
+   "nom": "Avenue Mbuyu",
+   "type": "avenue"
+  },
+  {
+   "id": 1380,
+   "nom": "Avenue Des Merveilles",
+   "type": "avenue"
+  },
+  {
+   "id": 1381,
+   "nom": "Avenue Méthodiste",
+   "type": "avenue"
+  },
+  {
+   "id": 1382,
+   "nom": "Avenue Miami",
+   "type": "avenue"
+  },
+  {
+   "id": 1383,
+   "nom": "Avenue Misha",
+   "type": "avenue"
+  },
+  {
+   "id": 1384,
+   "nom": "Avenue de la Mission",
+   "type": "avenue"
+  },
+  {
+   "id": 1385,
+   "nom": "Avenue Mitonga",
+   "type": "avenue"
+  },
+  {
+   "id": 1386,
+   "nom": "Avenue Mizumi Theophile",
+   "type": "avenue"
+  },
+  {
+   "id": 1387,
+   "nom": "Avenue Moanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1388,
+   "nom": "Avenue Moba",
+   "type": "avenue"
+  },
+  {
+   "id": 1389,
+   "nom": "Avenue Moero",
+   "type": "avenue"
+  },
+  {
+   "id": 1390,
+   "nom": "Avenue Mohamed",
+   "type": "avenue"
+  },
+  {
+   "id": 1391,
+   "nom": "Avenue Monga",
+   "type": "avenue"
+  },
+  {
+   "id": 1392,
+   "nom": "Avenue Monseigneur De Hemptinne",
+   "type": "avenue"
+  },
+  {
+   "id": 1393,
+   "nom": "Avenue Mont Flory",
+   "type": "avenue"
+  },
+  {
+   "id": 1394,
+   "nom": "Avenue De La Morgue",
+   "type": "avenue"
+  },
+  {
+   "id": 1395,
+   "nom": "Avenue de la Mosquée",
+   "type": "avenue"
+  },
+  {
+   "id": 1396,
+   "nom": "Avenue de la Moto",
+   "type": "avenue"
+  },
+  {
+   "id": 1397,
+   "nom": "Avenue de Mpala",
+   "type": "avenue"
+  },
+  {
+   "id": 1398,
+   "nom": "Avenue Mpanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1399,
+   "nom": "Avenue Mpolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1400,
+   "nom": "Boulevard Msiri",
+   "type": "boulevard"
+  },
+  {
+   "id": 1401,
+   "nom": "Avenue Mubanzo",
+   "type": "avenue"
+  },
+  {
+   "id": 1402,
+   "nom": "Avenue Mubembe",
+   "type": "avenue"
+  },
+  {
+   "id": 1403,
+   "nom": "Avenue Muchebele",
+   "type": "avenue"
+  },
+  {
+   "id": 1404,
+   "nom": "Avenue Muela",
+   "type": "avenue"
+  },
+  {
+   "id": 1405,
+   "nom": "Avenue Mufungwa",
+   "type": "avenue"
+  },
+  {
+   "id": 1406,
+   "nom": "Avenue Mukebo",
+   "type": "avenue"
+  },
+  {
+   "id": 1407,
+   "nom": "Avenue Mukena",
+   "type": "avenue"
+  },
+  {
+   "id": 1408,
+   "nom": "Avenue Mukendi Kabongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1409,
+   "nom": "Avenue Mukoj",
+   "type": "avenue"
+  },
+  {
+   "id": 1410,
+   "nom": "Avenue du Mukulakula",
+   "type": "avenue"
+  },
+  {
+   "id": 1411,
+   "nom": "Avenue Mulaji",
+   "type": "avenue"
+  },
+  {
+   "id": 1412,
+   "nom": "Avenue Mulamba Nyunyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1413,
+   "nom": "Avenue Muleka",
+   "type": "avenue"
+  },
+  {
+   "id": 1414,
+   "nom": "Avenue Mulo",
+   "type": "avenue"
+  },
+  {
+   "id": 1415,
+   "nom": "Avenue Mulongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1416,
+   "nom": "Avenue Mulungwishi",
+   "type": "avenue"
+  },
+  {
+   "id": 1417,
+   "nom": "Avenue Mulutu",
+   "type": "avenue"
+  },
+  {
+   "id": 1418,
+   "nom": "Avenue Mumbunda",
+   "type": "avenue"
+  },
+  {
+   "id": 1419,
+   "nom": "Avenue Mumgomba",
+   "type": "avenue"
+  },
+  {
+   "id": 1420,
+   "nom": "Avenue Mungongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1421,
+   "nom": "Avenue Munongo",
+   "type": "avenue"
+  },
+  {
+   "id": 1422,
+   "nom": "Avenue Munua",
+   "type": "avenue"
+  },
+  {
+   "id": 1423,
+   "nom": "Avenue Musanji",
+   "type": "avenue"
+  },
+  {
+   "id": 1424,
+   "nom": "Avenue du Musée",
+   "type": "avenue"
+  },
+  {
+   "id": 1425,
+   "nom": "Avenue Musesa",
+   "type": "avenue"
+  },
+  {
+   "id": 1426,
+   "nom": "Avenue Musofi",
+   "type": "avenue"
+  },
+  {
+   "id": 1427,
+   "nom": "Avenue Musonoïe",
+   "type": "avenue"
+  },
+  {
+   "id": 1428,
+   "nom": "Avenue Muswaswa",
+   "type": "avenue"
+  },
+  {
+   "id": 1429,
+   "nom": "Avenue Muteb Dipang",
+   "type": "avenue"
+  },
+  {
+   "id": 1430,
+   "nom": "Avenue Mutombo",
+   "type": "avenue"
+  },
+  {
+   "id": 1431,
+   "nom": "Avenue Muyombo",
+   "type": "avenue"
+  },
+  {
+   "id": 1432,
+   "nom": "Avenue de Mwadingusha",
+   "type": "avenue"
+  },
+  {
+   "id": 1433,
+   "nom": "Avenue Mwamba",
+   "type": "avenue"
+  },
+  {
+   "id": 1434,
+   "nom": "Avenue Mwando",
+   "type": "avenue"
+  },
+  {
+   "id": 1435,
+   "nom": "Avenue Mwandwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1436,
+   "nom": "Avenue Mwangaza",
+   "type": "avenue"
+  },
+  {
+   "id": 1437,
+   "nom": "Avenue Mwanza",
+   "type": "avenue"
+  },
+  {
+   "id": 1438,
+   "nom": "Avenue Mweka",
+   "type": "avenue"
+  },
+  {
+   "id": 1439,
+   "nom": "Avenue Mwenda",
+   "type": "avenue"
+  },
+  {
+   "id": 1440,
+   "nom": "Avenue Mwenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1441,
+   "nom": "Avenue Mwenze",
+   "type": "avenue"
+  },
+  {
+   "id": 1442,
+   "nom": "Avenue Mwepu",
+   "type": "avenue"
+  },
+  {
+   "id": 1443,
+   "nom": "Avenue Nambo",
+   "type": "avenue"
+  },
+  {
+   "id": 1444,
+   "nom": "Avenue Nana Banza",
+   "type": "avenue"
+  },
+  {
+   "id": 1445,
+   "nom": "Avenue Ndala",
+   "type": "avenue"
+  },
+  {
+   "id": 1446,
+   "nom": "Avenue Ndemba",
+   "type": "avenue"
+  },
+  {
+   "id": 1447,
+   "nom": "Avenue de N'Djamena",
+   "type": "avenue"
+  },
+  {
+   "id": 1448,
+   "nom": "Avenue Ndombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1449,
+   "nom": "Avenue Ndumbi",
+   "type": "avenue"
+  },
+  {
+   "id": 1450,
+   "nom": "Avenue Nefoka",
+   "type": "avenue"
+  },
+  {
+   "id": 1451,
+   "nom": "Avenue Ngala",
+   "type": "avenue"
+  },
+  {
+   "id": 1452,
+   "nom": "Avenue Ngandu",
+   "type": "avenue"
+  },
+  {
+   "id": 1453,
+   "nom": "Avenue Ngoie Yenge Kyansonyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1454,
+   "nom": "Avenue Ngombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1455,
+   "nom": "Avenue Ngongolu",
+   "type": "avenue"
+  },
+  {
+   "id": 1456,
+   "nom": "Avenue Ngongo Lutete",
+   "type": "avenue"
+  },
+  {
+   "id": 1457,
+   "nom": "Avenue Nguba",
+   "type": "avenue"
+  },
+  {
+   "id": 1458,
+   "nom": "Avenue Nguza",
+   "type": "avenue"
+  },
+  {
+   "id": 1459,
+   "nom": "Avenue Ngwej Seraphin",
+   "type": "avenue"
+  },
+  {
+   "id": 1460,
+   "nom": "Avenue Niunzu",
+   "type": "avenue"
+  },
+  {
+   "id": 1461,
+   "nom": "Avenue Nkalanyi",
+   "type": "avenue"
+  },
+  {
+   "id": 1462,
+   "nom": "Avenue Nkole",
+   "type": "avenue"
+  },
+  {
+   "id": 1463,
+   "nom": "Avenue Nonda",
+   "type": "avenue"
+  },
+  {
+   "id": 1464,
+   "nom": "Avenue Nuru",
+   "type": "avenue"
+  },
+  {
+   "id": 1465,
+   "nom": "Avenue Nyanda",
+   "type": "avenue"
+  },
+  {
+   "id": 1466,
+   "nom": "Avenue Nyangwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1467,
+   "nom": "Avenue Nyembo",
+   "type": "avenue"
+  },
+  {
+   "id": 1468,
+   "nom": "Avenue Nyembo Delphin",
+   "type": "avenue"
+  },
+  {
+   "id": 1469,
+   "nom": "Avenue Nyota",
+   "type": "avenue"
+  },
+  {
+   "id": 1470,
+   "nom": "Avenue Oasis",
+   "type": "avenue"
+  },
+  {
+   "id": 1471,
+   "nom": "Avenue Obotela",
+   "type": "avenue"
+  },
+  {
+   "id": 1472,
+   "nom": "Avenue Océan atlantique",
+   "type": "avenue"
+  },
+  {
+   "id": 1473,
+   "nom": "Avenue Office de Routes",
+   "type": "avenue"
+  },
+  {
+   "id": 1474,
+   "nom": "Avenue Okapi",
+   "type": "avenue"
+  },
+  {
+   "id": 1475,
+   "nom": "Avenue Okito",
+   "type": "avenue"
+  },
+  {
+   "id": 1476,
+   "nom": "Avenue des Oliviers",
+   "type": "avenue"
+  },
+  {
+   "id": 1477,
+   "nom": "Avenue Omba",
+   "type": "avenue"
+  },
+  {
+   "id": 1478,
+   "nom": "Avenue Ouagadougou",
+   "type": "avenue"
+  },
+  {
+   "id": 1479,
+   "nom": "Avenue Pacifique",
+   "type": "avenue"
+  },
+  {
+   "id": 1480,
+   "nom": "Avenue de la Paix",
+   "type": "avenue"
+  },
+  {
+   "id": 1481,
+   "nom": "Avenue du Palmier",
+   "type": "avenue"
+  },
+  {
+   "id": 1482,
+   "nom": "Avenue Panda",
+   "type": "avenue"
+  },
+  {
+   "id": 1483,
+   "nom": "Avenue Papa Yuma",
+   "type": "avenue"
+  },
+  {
+   "id": 1484,
+   "nom": "Avenue du Parc",
+   "type": "avenue"
+  },
+  {
+   "id": 1485,
+   "nom": "Avenue Pataule",
+   "type": "avenue"
+  },
+  {
+   "id": 1486,
+   "nom": "Avenue du PDG",
+   "type": "avenue"
+  },
+  {
+   "id": 1487,
+   "nom": "Avenue Penga Penga",
+   "type": "avenue"
+  },
+  {
+   "id": 1488,
+   "nom": "Avenue la Persévérance",
+   "type": "avenue"
+  },
+  {
+   "id": 1489,
+   "nom": "Rue Petit Plus",
+   "type": "rue"
+  },
+  {
+   "id": 1490,
+   "nom": "Avenue des Pioniers",
+   "type": "avenue"
+  },
+  {
+   "id": 1491,
+   "nom": "Avenue de Plateau",
+   "type": "avenue"
+  },
+  {
+   "id": 1492,
+   "nom": "Avenue Polytechnique",
+   "type": "avenue"
+  },
+  {
+   "id": 1493,
+   "nom": "Avenue Pongolo",
+   "type": "avenue"
+  },
+  {
+   "id": 1494,
+   "nom": "Avenue du Potager",
+   "type": "avenue"
+  },
+  {
+   "id": 1495,
+   "nom": "Avenue des Princes",
+   "type": "avenue"
+  },
+  {
+   "id": 1496,
+   "nom": "Avenue prof KAUMBA",
+   "type": "avenue"
+  },
+  {
+   "id": 1497,
+   "nom": "Avenue du Prophète Kimbangu",
+   "type": "avenue"
+  },
+  {
+   "id": 1498,
+   "nom": "Avenue Prudent",
+   "type": "avenue"
+  },
+  {
+   "id": 1499,
+   "nom": "Avenue de Psychologie",
+   "type": "avenue"
+  },
+  {
+   "id": 1500,
+   "nom": "Avenue de la Puissance",
+   "type": "avenue"
+  },
+  {
+   "id": 1501,
+   "nom": "Avenue du Radium",
+   "type": "avenue"
+  },
+  {
+   "id": 1502,
+   "nom": "Avenue Ramazani",
+   "type": "avenue"
+  },
+  {
+   "id": 1503,
+   "nom": "Avenue de Refugés",
+   "type": "avenue"
+  },
+  {
+   "id": 1504,
+   "nom": "Avenue Ribambele",
+   "type": "avenue"
+  },
+  {
+   "id": 1505,
+   "nom": "Avenue De La Rive",
+   "type": "avenue"
+  },
+  {
+   "id": 1506,
+   "nom": "Avenue de la Rivière",
+   "type": "avenue"
+  },
+  {
+   "id": 1507,
+   "nom": "Avenue Robertom",
+   "type": "avenue"
+  },
+  {
+   "id": 1508,
+   "nom": "Avenue du Rocher",
+   "type": "avenue"
+  },
+  {
+   "id": 1509,
+   "nom": "Avenue de la RTNC",
+   "type": "avenue"
+  },
+  {
+   "id": 1510,
+   "nom": "Avenue Rubi",
+   "type": "avenue"
+  },
+  {
+   "id": 1511,
+   "nom": "Avenue Rumb",
+   "type": "avenue"
+  },
+  {
+   "id": 1512,
+   "nom": "Avenue Ruwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1513,
+   "nom": "Avenue Ruwe Prolonge",
+   "type": "avenue"
+  },
+  {
+   "id": 1514,
+   "nom": "Avenue Sabot I",
+   "type": "avenue"
+  },
+  {
+   "id": 1515,
+   "nom": "Avenue Sabot II",
+   "type": "avenue"
+  },
+  {
+   "id": 1516,
+   "nom": "Rue Saidi",
+   "type": "rue"
+  },
+  {
+   "id": 1517,
+   "nom": "Avenue Saint Andre",
+   "type": "avenue"
+  },
+  {
+   "id": 1518,
+   "nom": "Avenue Saint Pierre",
+   "type": "avenue"
+  },
+  {
+   "id": 1519,
+   "nom": "Avenue Salama",
+   "type": "avenue"
+  },
+  {
+   "id": 1520,
+   "nom": "Avenue Salveta",
+   "type": "avenue"
+  },
+  {
+   "id": 1521,
+   "nom": "Avenue Sandoa",
+   "type": "avenue"
+  },
+  {
+   "id": 1522,
+   "nom": "Avenue Sanguza",
+   "type": "avenue"
+  },
+  {
+   "id": 1523,
+   "nom": "Avenue Sangwa",
+   "type": "avenue"
+  },
+  {
+   "id": 1524,
+   "nom": "Avenue Sanière",
+   "type": "avenue"
+  },
+  {
+   "id": 1525,
+   "nom": "Avenue Shabunda",
+   "type": "avenue"
+  },
+  {
+   "id": 1526,
+   "nom": "Avenue Shahiya",
+   "type": "avenue"
+  },
+  {
+   "id": 1527,
+   "nom": "Avenue Shebwe 1",
+   "type": "avenue"
+  },
+  {
+   "id": 1528,
+   "nom": "Avenue Shebwe 2",
+   "type": "avenue"
+  },
+  {
+   "id": 1529,
+   "nom": "Avenue Shimba",
+   "type": "avenue"
+  },
+  {
+   "id": 1530,
+   "nom": "Avenue Shindano",
+   "type": "avenue"
+  },
+  {
+   "id": 1531,
+   "nom": "Avenue Shituru",
+   "type": "avenue"
+  },
+  {
+   "id": 1532,
+   "nom": "Avenue Shiwala",
+   "type": "avenue"
+  },
+  {
+   "id": 1533,
+   "nom": "Avenue Simama",
+   "type": "avenue"
+  },
+  {
+   "id": 1534,
+   "nom": "Rue Simama",
+   "type": "rue"
+  },
+  {
+   "id": 1535,
+   "nom": "Avenue du Sinaï",
+   "type": "avenue"
+  },
+  {
+   "id": 1536,
+   "nom": "Avenue Singa",
+   "type": "avenue"
+  },
+  {
+   "id": 1537,
+   "nom": "Avenue SNEL",
+   "type": "avenue"
+  },
+  {
+   "id": 1538,
+   "nom": "Avenue Sokwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1539,
+   "nom": "Avenue Sola",
+   "type": "avenue"
+  },
+  {
+   "id": 1540,
+   "nom": "Avenue du Soleil",
+   "type": "avenue"
+  },
+  {
+   "id": 1541,
+   "nom": "Avenue Sombe Sombe",
+   "type": "avenue"
+  },
+  {
+   "id": 1542,
+   "nom": "Avenue Songa",
+   "type": "avenue"
+  },
+  {
+   "id": 1543,
+   "nom": "Avenue Songela",
+   "type": "avenue"
+  },
+  {
+   "id": 1544,
+   "nom": "Avenue Songololo",
+   "type": "avenue"
+  },
+  {
+   "id": 1545,
+   "nom": "Avenue des Sports",
+   "type": "avenue"
+  },
+  {
+   "id": 1546,
+   "nom": "Rue des Sports 2",
+   "type": "rue"
+  },
+  {
+   "id": 1547,
+   "nom": "Avenue Stella Ilunga",
+   "type": "avenue"
+  },
+  {
+   "id": 1548,
+   "nom": "Avenue Sumaïli",
+   "type": "avenue"
+  },
+  {
+   "id": 1549,
+   "nom": "Avenue du Tabernacle",
+   "type": "avenue"
+  },
+  {
+   "id": 1550,
+   "nom": "Avenue Tabiale",
+   "type": "avenue"
+  },
+  {
+   "id": 1551,
+   "nom": "Avenue de Tabora",
+   "type": "avenue"
+  },
+  {
+   "id": 1552,
+   "nom": "Avenue Tambwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1553,
+   "nom": "Avenue Tanganyika",
+   "type": "avenue"
+  },
+  {
+   "id": 1554,
+   "nom": "Avenue Tembo",
+   "type": "avenue"
+  },
+  {
+   "id": 1555,
+   "nom": "Avenue Tenke",
+   "type": "avenue"
+  },
+  {
+   "id": 1556,
+   "nom": "Avenue de Tennis",
+   "type": "avenue"
+  },
+  {
+   "id": 1557,
+   "nom": "Avenue des Termitières",
+   "type": "avenue"
+  },
+  {
+   "id": 1558,
+   "nom": "Avenue Titanic",
+   "type": "avenue"
+  },
+  {
+   "id": 1559,
+   "nom": "Avenue Towa",
+   "type": "avenue"
+  },
+  {
+   "id": 1560,
+   "nom": "Avenue des Trésors",
+   "type": "avenue"
+  },
+  {
+   "id": 1561,
+   "nom": "Avenue des Tribunes",
+   "type": "avenue"
+  },
+  {
+   "id": 1562,
+   "nom": "Avenue Tshangolowe",
+   "type": "avenue"
+  },
+  {
+   "id": 1563,
+   "nom": "Avenue Tshebwe",
+   "type": "avenue"
+  },
+  {
+   "id": 1564,
+   "nom": "Avenue Tshebwe Prolongée",
+   "type": "avenue"
+  },
+  {
+   "id": 1565,
+   "nom": "Avenue Tshiama",
+   "type": "avenue"
+  },
+  {
+   "id": 1566,
+   "nom": "Avenue Tshibal",
+   "type": "avenue"
+  },
+  {
+   "id": 1567,
+   "nom": "Avenue Tshibangu",
+   "type": "avenue"
+  },
+  {
+   "id": 1568,
+   "nom": "Avenue Tshiela",
+   "type": "avenue"
+  },
+  {
+   "id": 1569,
+   "nom": "Avenue Tshiela 2",
+   "type": "avenue"
+  },
+  {
+   "id": 1570,
+   "nom": "Avenue Tshikez",
+   "type": "avenue"
+  },
+  {
+   "id": 1571,
+   "nom": "Avenue Tshimanga",
+   "type": "avenue"
+  },
+  {
+   "id": 1572,
+   "nom": "Avenue Tshiniama",
+   "type": "avenue"
+  },
+  {
+   "id": 1573,
+   "nom": "Avenue Tshiwew",
+   "type": "avenue"
+  },
+  {
+   "id": 1574,
+   "nom": "Avenue Tshofa",
+   "type": "avenue"
+  },
+  {
+   "id": 1575,
+   "nom": "Avenue Tshondo",
+   "type": "avenue"
+  },
+  {
+   "id": 1576,
+   "nom": "Avenue Tuta",
+   "type": "avenue"
+  },
+  {
+   "id": 1577,
+   "nom": "Avenue Twikale",
+   "type": "avenue"
+  },
+  {
+   "id": 1578,
+   "nom": "Avenue Ulindi",
+   "type": "avenue"
+  },
+  {
+   "id": 1579,
+   "nom": "Avenue Umoja",
+   "type": "avenue"
+  },
+  {
+   "id": 1580,
+   "nom": "Avenue de l'Université",
+   "type": "avenue"
+  },
+  {
+   "id": 1581,
+   "nom": "Rue Ushindi",
+   "type": "rue"
+  },
+  {
+   "id": 1582,
+   "nom": "Avenue les Vainqueurs",
+   "type": "avenue"
+  },
+  {
+   "id": 1583,
+   "nom": "Avenue Vangu",
+   "type": "avenue"
+  },
+  {
+   "id": 1584,
+   "nom": "Avenue Le Verger",
+   "type": "avenue"
+  },
+  {
+   "id": 1585,
+   "nom": "Avenue Verte",
+   "type": "avenue"
+  },
+  {
+   "id": 1586,
+   "nom": "Avenue de la Victoire",
+   "type": "avenue"
+  },
+  {
+   "id": 1587,
+   "nom": "Avenue de la Vigne",
+   "type": "avenue"
+  },
+  {
+   "id": 1588,
+   "nom": "Avenue des Volontaires",
+   "type": "avenue"
+  },
+  {
+   "id": 1589,
+   "nom": "Avenue de Vua",
+   "type": "avenue"
+  },
+  {
+   "id": 1590,
+   "nom": "Avenue Wenge",
+   "type": "avenue"
+  },
+  {
+   "id": 1591,
+   "nom": "Avenue Wylem",
+   "type": "avenue"
+  },
+  {
+   "id": 1592,
+   "nom": "Avenue Yacinthe Bukasa",
+   "type": "avenue"
+  },
+  {
+   "id": 1593,
+   "nom": "Avenue Yamoto",
+   "type": "avenue"
+  },
+  {
+   "id": 1594,
+   "nom": "Avenue Yav",
+   "type": "avenue"
+  },
+  {
+   "id": 1595,
+   "nom": "Avenue Yende Kyusu",
+   "type": "avenue"
+  },
+  {
+   "id": 1596,
+   "nom": "Avenue du Zambèze",
+   "type": "avenue"
+  },
+  {
+   "id": 1597,
+   "nom": "Avenue Zawadi-Bora",
+   "type": "avenue"
+  },
+  {
+   "id": 1598,
+   "nom": "Avenue de Zilo",
+   "type": "avenue"
+  },
+  {
+   "id": 1599,
+   "nom": "Avenue du Zinc",
+   "type": "avenue"
+  }
+ ]
+}

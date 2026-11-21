@@ -15,19 +15,23 @@ from flask import Flask, jsonify
 import prevision
 import stockage
 from api import bp as bp_previsions
+from carte import bp as bp_carte
 from collecte import bp as bp_collecte
 
 app = Flask(__name__)
 app.json.ensure_ascii = False  # accents lisibles dans les réponses JSON
 app.register_blueprint(bp_collecte)
 app.register_blueprint(bp_previsions)
+app.register_blueprint(bp_carte)
 
 
 @app.get("/")
 def accueil():
     return jsonify({
         "service": "Haraka trafic-ia",
-        "routes": ["GET /sante", "POST /collecte", "POST /signalement", "POST /previsions"],
+        "routes": ["GET /sante", "GET /carte", "GET /routes", "GET /feries", "GET /signalement/types",
+                   "POST /collecte", "POST /signalement", "POST /observation", "POST /routes",
+                   "POST /routes/<n>/points", "POST /previsions"],
     })
 
 

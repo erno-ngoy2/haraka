@@ -64,7 +64,24 @@ ROUTES_JSON = DATA / "routes.json"                       # les 10 routes de dép
 TYPES_SIGNALEMENT_JSON = DATA / "types_signalement.json"  # bar, hôtel, accident...
 DISTANCE_MAX_ROUTE_M = 100   # à moins de ça d'une route, on considère qu'on est dessus
 
-# Routes créées sur le terrain depuis l'app (numéros 11, 12, ...), rangées dans Firestore.
+# Catalogue des rues de Lubumbashi (noms seulement, sans coordonnées), numéros 1001, 1002...
+# Construit par outils/construire_catalogue_rues.py. Copié dans l'app (assets/).
+RUES_JSON = DATA / "rues_lubumbashi.json"
+PREMIER_ID_CATALOGUE = 1001
+
+# Toutes les routes (10 de départ, catalogue, créées) prennent leur VRAIE forme avec les
+# points relevés sur le terrain. Seuils (nombre de points relevés sur la route) :
+POINTS_ROUTE_DESSINEE = 4       # « plus de 3 points » : les points se relient en une route
+POINTS_ETAT_TEMPS_REEL = 6      # « plus de 5 points » : on affiche l'état de la route
+POINTS_ROUTE_PRETE = 11         # « plus de 10 points » : forme exacte, route prête (100 %)
+# État en temps réel : une observation sur la route depuis moins de N minutes l'emporte
+# sur la prévision du modèle.
+FRAICHEUR_OBSERVATION_MIN = 60
+CACHE_CARTE_S = 60              # /carte est recalculée au plus toutes les 60 s
+CACHE_AVANCEMENT_IA_S = 300     # comptage des données d'entraînement : toutes les 5 min
+
+# Routes créées sur le terrain depuis l'app (numéros 11, 12, ...), et points relevés sur
+# toutes les routes : rangés dans Firestore (un document par route).
 COLLECTION_ROUTES = "routes"
 MAX_POINTS_ROUTE = 200          # points maximum par route créée
 LONGUEUR_MAX_NOM_ROUTE = 80
