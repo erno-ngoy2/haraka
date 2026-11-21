@@ -107,7 +107,9 @@ Pour tester depuis l'app : émulateur Android = `http://10.0.2.2:5000` ; vrai t�
 - [x] Routes créées sur le terrain (11, 12...) et carte OpenStreetMap interactive (osmdroid) dans la Visualisation (2026-11-21)
 - [x] Carte « maison » (2026-11-21) : plus de fond de carte. Toutes les routes (10 de départ, 599 rues du catalogue `data/rues_lubumbashi.json` ids 1001+, routes créées 11+) prennent leur forme avec les points relevés : `route_id` dans /observation et /signalement, ou /routes/<n>/points. Seuils (config.py) : 4 points = dessinée, 6 = état en temps réel, 11 = prête. `GET /carte` : avancement par rue, cartographie (%), IA (% = jours/14, observations/500, modèle réel) et état en temps réel (observation < 60 min, sinon prévision) seulement à partir de 6 points.
 - [ ] vercel.json : `excludeFiles` doit rester sous 256 caractères (sinon le déploiement échoue)
-- [ ] App : service de collecte GPS automatique en conduite (Foreground Service + envoi par lots)
+- [x] App (2026-11-21, décision de l'utilisateur) : l'enregistrement manuel du niveau (fluide / dense / embouteillage) est RETIRÉ de l'app ; l'entraînement passe seulement par le bouton Signaler (contexte capté automatiquement : GPS au moment du clic, heure, météo, férié). Ajout du POINTAGE MANUEL : latitude + longitude tapées, rue choisie (ou créée), point marqué `saisie: manuelle`.
+- [ ] À rediscuter : sans observation manuelle ni collecte GPS continue, le modèle n'a plus de source de NIVEAU de trafic (les signalements donnent seulement des circonstances). /carte compte les positions GPS pour l'avancement de l'IA : elles restent à 0 tant qu'aucune collecte continue n'existe.
+- [ ] (abandonné pour l'instant) App : service de collecte GPS automatique en conduite (Foreground Service + envoi par lots)
 - [ ] App : tester un vrai envoi (signalement / observation) depuis le téléphone, dehors (GPS précis)
 - [x] Ville de départ : Lubumbashi (2026-11-21)
 - [ ] Choisir les 10 à 20 axes de Lubumbashi à suivre en premier
