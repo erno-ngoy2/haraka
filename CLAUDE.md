@@ -40,7 +40,9 @@ En local sans clé Firebase, `stockage.py` utilise SQLite (`trafic.db`) pour les
 | `config.py` | **Tous les réglages** : chemins, fuseau, seuils, features, modèle, Firestore. Modifier ici en priorité. |
 | `app.py` | **Point d'entrée unique** (Vercel et local, port 5000) : branche `collecte.py` et `api.py`, plus `GET /` et `GET /sante`. |
 | `stockage.py` | Lecture/écriture des positions et signalements : Firestore si clé trouvée (`FIREBASE_CREDENTIALS` ou `firebase-cle.json`), sinon SQLite. 1 envoi de l'app = 1 document Firestore (économie d'écritures). |
-| `collecte.py` | `POST /collecte` (points GPS par lots de 500 max) et `POST /signalement`. Validation, clé via variable d'environnement `TRAFIC_CLE` (en-tête `X-Cle`). |
+| `collecte.py` | Avec clé (`TRAFIC_CLE`, en-tête `X-Cle`) : `POST /collecte` (points GPS par lots de 500 max), `POST /signalement` (type du catalogue + contexte de l'app), `POST /observation` (niveau constaté à la main dans l'app). Sans clé : `GET /routes`, `GET /signalement/types`, `GET /feries`. La route est **recalculée par le serveur**. |
+| `routes.py` + `data/routes.json` | Les **10 routes de départ du centre-ville de Lubumbashi** (lignes droites départ → arrivée) et « route la plus proche » (sur la route si < `DISTANCE_MAX_ROUTE_M` = 100 m). Même règle dans l'app (`DetecteurRoute.kt`). |
+| `data/types_signalement.json` | Catalogue des signalements : **incidents** (accident, travaux, route bloquée, inondation, panne, police, cortège, manifestation, événement) qui donnent une `circonstance`, et **lieux** (bar, hôtel, magasin, marché, église, école, hôpital, station-service, banque...) sans circonstance, gardés pour une future information du modèle. Copié dans l'app (`assets/`). |
 | `aggregation.py` | Positions brutes → résumé zone+date+heure ajouté à `data/agregats.csv` (historique durable : 7 derniers jours recalculés, plus anciens figés) → `trafic.csv` avec le niveau calculé sur tout l'historique, + météo, fériés, circonstances, observations. Puis supprime les brutes de plus de 30 jours (`--sans-purge` pour éviter). Tourne sur le PC. |
 | `train.py` | Découpage chronologique, comparaison avec 2 références (classe fréquente, habitude zone+heure) et avec le modèle publié, garde-fous, puis réentraînement sur tout et sauvegarde `{"modele", "meta"}` compressée. Rapport JSON dans `rapports/`. `--essai` : évaluer sans publier ; `--forcer` : publier malgré un garde-fou. Code de sortie 2 = refusé. |
 | `prevision.py` | Charge le modèle et ses infos (`meta` : version, période, scores, zones connues), calcule les prévisions heure par heure, applique les règles de jours fériés, mesure la distance à la zone connue la plus proche. |
@@ -100,8 +102,9 @@ Pour tester depuis l'app : émulateur Android = `http://10.0.2.2:5000` ; vrai t�
 - [x] Règles pour les jours fériés
 - [x] Testé de bout en bout avec des données artificielles
 - [ ] **App Android : service de collecte GPS** (Foreground Service, FusedLocationProvider, mode conduite, envoi par lots avec WorkManager)
-- [ ] App Android : bouton « Signaler » (accident / travaux / événement)
-- [ ] App Android : écran de prévisions (appelle `POST /previsions`)
+- [x] App Android (`D:\projet haraka\haraka`, pas dans ce dépôt) : écran **Entraînement** (contexte capté : position, précision, route parmi les 10, date, heure, jour, férié, météo Open-Meteo ; enregistrement manuel ; bouton Signaler avec menu incidents / lieux ; file d'attente hors réseau) et écran **Visualisation** (carte schématique des 10 routes colorée à l'heure actuelle, prévisions détaillées par route). Testée sur Infinix X657 (Android 10) le 2026-11-21.
+- [ ] App : service de collecte GPS automatique en conduite (Foreground Service + envoi par lots)
+- [ ] App : tester un vrai envoi (signalement / observation) depuis le téléphone, dehors (GPS précis)
 - [x] Ville de départ : Lubumbashi (2026-11-21)
 - [ ] Choisir les 10 à 20 axes de Lubumbashi à suivre en premier
 - [ ] Première collecte réelle + observations manuelles (voir README)

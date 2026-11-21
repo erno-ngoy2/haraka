@@ -148,7 +148,16 @@ Essaie aussi `--jours 10 --reset` (le modèle doit être refusé : moins de 14 j
              "vitesse_kmh": 18.5, "precision_m": 9, "en_vehicule": 1}]}
 ```
 
-`POST /signalement` : `{"device": "...", "ts": "...", "lat": ..., "lon": ..., "type": "accident"}`
+`POST /signalement` (clé) : `{"device": "...", "ts": "...", "lat": ..., "lon": ..., "type": "bar",
+"precision_m": 8, "commentaire": "...", "contexte": {...}}`. `type` : un `id` de
+`data/types_signalement.json` (accident, travaux, bar, hotel, magasin...). Réponse : la route
+la plus proche calculée par le serveur.
+
+`POST /observation` (clé) : `{"device", "ts", "lat", "lon", "niveau": "dense", "pluie": 0/1,
+"circonstance": "normal", "commentaire", "contexte"}` : niveau constaté sur place (exemple
+d'entraînement, jamais purgé).
+
+`GET /routes`, `GET /signalement/types`, `GET /feries` (sans clé) : référentiels pour l'app.
 
 `POST /previsions`
 
