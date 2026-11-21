@@ -1,25 +1,45 @@
-"""Collecte : reçoit les positions GPS et les signalements de l'app.
+"""Collecte : reçoit ce que l'app envoie (routes branchées dans app.py).
 
-Routes (branchées dans app.py) :
-    POST /collecte      points GPS, par lots de 500 maximum
-    POST /signalement   accident / travaux / evenement
+Avec la clé (en-tête X-Cle = variable d'environnement TRAFIC_CLE) :
+    POST /collecte       points GPS, par lots de 500 maximum
+    POST /signalement    incident (accident, travaux...) ou lieu (bar, hôtel, magasin...)
+    POST /observation    enregistrement manuel : niveau de trafic constaté sur place
 
-Protection simple (OBLIGATOIRE une fois en ligne) :
-    définis la variable d'environnement TRAFIC_CLE ; l'app doit alors envoyer
-    l'en-tête HTTP  X-Cle: <la même valeur>.
+Sans clé (lecture seule, utilisées par l'app) :
+    GET  /routes               les 10 routes de départ (data/routes.json)
+    GET  /signalement/types    la liste des signalements possibles (data/types_signalement.json)
+    GET  /feries               les jours fériés (data/feries.csv)
+
+Pour chaque signalement et observation, le serveur recalcule lui-même la route la plus
+proche (routes.py) : c'est cette valeur qui fait foi, pas celle envoyée par l'app.
 Les données vont dans Firestore en ligne, dans SQLite en local (voir stockage.py).
 """
+import functools
 import hmac
+import json
 import os
 from datetime import datetime
 
 from flask import Blueprint, jsonify, request
 
 import config
+import prevision
+import routes
 import stockage
 
 bp = Blueprint("collecte", __name__)
-TYPES_SIGNALEMENT = {"accident", "travaux", "evenement"}
+MAX_COMMENTAIRE = 300
+MAX_CONTEXTE = 3000   # taille max (caractères JSON) du contexte envoyé par l'app
+
+
+@functools.lru_cache(maxsize=1)
+def catalogue():
+    return json.loads(config.TYPES_SIGNALEMENT_JSON.read_text(encoding="utf-8"))
+
+
+def types_signalement():
+    """{"accident": {"id", "nom", "categorie", "circonstance"}, ...}"""
+    return {t["id"]: t for t in catalogue()["types"]}
 
 
 def cle_ok():
@@ -64,6 +84,36 @@ def nettoyer(p):
     }
 
 
+def base_commune(d):
+    """Champs communs aux signalements et observations. Lève ValueError si invalide."""
+    if not ts_valide(d.get("ts")):
+        raise ValueError("ts")
+    lat, lon = float(d["lat"]), float(d["lon"])
+    if not (-90 <= lat <= 90 and -180 <= lon <= 180):
+        raise ValueError("lat/lon")
+    doc = {"device": str(d.get("device", "?"))[:64], "ts": str(d["ts"]), "lat": lat, "lon": lon,
+           "route": routes.plus_proche(lat, lon)}
+    if d.get("precision_m") is not None:
+        doc["precision_m"] = round(float(d["precision_m"]), 1)
+    commentaire = str(d.get("commentaire") or "").strip()[:MAX_COMMENTAIRE]
+    if commentaire:
+        doc["commentaire"] = commentaire
+    contexte = d.get("contexte")
+    if isinstance(contexte, dict) and len(json.dumps(contexte)) <= MAX_CONTEXTE:
+        doc["contexte"] = contexte   # météo, férié, heure locale... vus par l'app
+    return doc
+
+
+def enregistrer(fonction, doc):
+    try:
+        fonction(doc)
+    except stockage.StockageIndisponible as e:
+        return jsonify({"erreur": str(e)}), 503
+    return jsonify({"ok": True, "route": doc["route"]})
+
+
+# --- Écriture (clé obligatoire si TRAFIC_CLE est définie) --------------------
+
 @bp.post("/collecte")
 def collecte():
     if not cle_ok():
@@ -87,19 +137,52 @@ def signalement():
     if not cle_ok():
         return jsonify({"erreur": "clé invalide"}), 401
     d = request.get_json(silent=True) or {}
+    types = types_signalement()
     try:
-        type_ = str(d["type"]).lower()
-        if type_ not in TYPES_SIGNALEMENT or not ts_valide(d["ts"]):
-            raise ValueError
-        lat, lon = float(d["lat"]), float(d["lon"])
-        if not (-90 <= lat <= 90 and -180 <= lon <= 180):
-            raise ValueError
+        t = types[str(d["type"]).lower()]
+        doc = base_commune(d)
     except (KeyError, ValueError, TypeError):
-        return jsonify({"erreur": "champs requis : ts, lat, lon, type "
-                                  f"({'/'.join(sorted(TYPES_SIGNALEMENT))})"}), 400
+        return jsonify({"erreur": "champs requis : ts (ISO 8601), lat, lon, type parmi : "
+                                  + ", ".join(types)}), 400
+    doc.update({"type": t["id"], "nom_type": t["nom"], "categorie": t["categorie"],
+                "circonstance": t["circonstance"]})
+    return enregistrer(stockage.ajouter_signalement, doc)
+
+
+@bp.post("/observation")
+def observation():
+    """Enregistrement manuel : « ici, maintenant, le trafic est fluide / dense / embouteillage »."""
+    if not cle_ok():
+        return jsonify({"erreur": "clé invalide"}), 401
+    d = request.get_json(silent=True) or {}
     try:
-        stockage.ajouter_signalement({"device": str(d.get("device", "?"))[:64],
-                                      "ts": str(d["ts"]), "lat": lat, "lon": lon, "type": type_})
-    except stockage.StockageIndisponible as e:
-        return jsonify({"erreur": str(e)}), 503
-    return jsonify({"ok": True})
+        niveau = str(d["niveau"]).lower()
+        circonstance = str(d.get("circonstance") or "normal").lower()
+        if niveau not in config.NIVEAUX or circonstance not in config.CIRCONSTANCES:
+            raise ValueError("niveau/circonstance")
+        doc = base_commune(d)
+        doc.update({"niveau": niveau, "circonstance": circonstance,
+                    "pluie": 1 if int(d.get("pluie", 0)) else 0})
+    except (KeyError, ValueError, TypeError):
+        return jsonify({"erreur": "champs requis : ts, lat, lon, niveau ("
+                                  + "/".join(config.NIVEAUX) + "). Optionnels : pluie (0/1), "
+                                  "circonstance (" + "/".join(config.CIRCONSTANCES) + "), "
+                                  "commentaire, precision_m, contexte"}), 400
+    return enregistrer(stockage.ajouter_observation, doc)
+
+
+# --- Lecture publique (pour l'app) ---------------------------------------------
+
+@bp.get("/routes")
+def liste_routes():
+    return jsonify(routes.charger())
+
+
+@bp.get("/signalement/types")
+def liste_types():
+    return jsonify(catalogue())
+
+
+@bp.get("/feries")
+def liste_feries():
+    return jsonify({"feries": prevision.charger_feries().to_dict("records")})

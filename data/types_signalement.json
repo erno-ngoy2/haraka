@@ -1,0 +1,36 @@
+{
+  "categories": [
+    {"id": "incident", "nom": "Incident sur la route",
+     "description": "Bloque ou ralentit la circulation maintenant. Utilisé par le modèle (circonstance)."},
+    {"id": "lieu", "nom": "Lieu qui attire du trafic",
+     "description": "Endroit où les voitures s'arrêtent ou se garent. Enregistré pour une future information du modèle."}
+  ],
+  "types": [
+    {"id": "accident",         "nom": "Accident",                           "categorie": "incident", "circonstance": "accident"},
+    {"id": "travaux",          "nom": "Travaux",                            "categorie": "incident", "circonstance": "travaux"},
+    {"id": "route_bloquee",    "nom": "Route bloquée / barrière",           "categorie": "incident", "circonstance": "travaux"},
+    {"id": "inondation",       "nom": "Inondation / route impraticable",    "categorie": "incident", "circonstance": "travaux"},
+    {"id": "panne",            "nom": "Véhicule en panne",                  "categorie": "incident", "circonstance": "accident"},
+    {"id": "police",           "nom": "Contrôle de police / roulage",       "categorie": "incident", "circonstance": "evenement"},
+    {"id": "cortege",          "nom": "Cortège officiel",                   "categorie": "incident", "circonstance": "evenement"},
+    {"id": "manifestation",    "nom": "Manifestation / marche",             "categorie": "incident", "circonstance": "evenement"},
+    {"id": "evenement",        "nom": "Événement (match, concert, deuil...)", "categorie": "incident", "circonstance": "evenement"},
+
+    {"id": "bar",              "nom": "Bar / terrasse",                     "categorie": "lieu", "circonstance": null},
+    {"id": "hotel",            "nom": "Hôtel",                              "categorie": "lieu", "circonstance": null},
+    {"id": "magasin",          "nom": "Magasin / boutique",                 "categorie": "lieu", "circonstance": null},
+    {"id": "supermarche",      "nom": "Supermarché",                        "categorie": "lieu", "circonstance": null},
+    {"id": "marche",           "nom": "Marché",                             "categorie": "lieu", "circonstance": null},
+    {"id": "restaurant",       "nom": "Restaurant / malewa",                "categorie": "lieu", "circonstance": null},
+    {"id": "salle_fete",       "nom": "Salle de fête",                      "categorie": "lieu", "circonstance": null},
+    {"id": "eglise",           "nom": "Église / lieu de culte",             "categorie": "lieu", "circonstance": null},
+    {"id": "ecole",            "nom": "École / université",                 "categorie": "lieu", "circonstance": null},
+    {"id": "hopital",          "nom": "Hôpital / centre de santé",          "categorie": "lieu", "circonstance": null},
+    {"id": "station_service",  "nom": "Station-service",                    "categorie": "lieu", "circonstance": null},
+    {"id": "banque",           "nom": "Banque / agence de transfert",       "categorie": "lieu", "circonstance": null},
+    {"id": "administration",   "nom": "Bureau administratif",               "categorie": "lieu", "circonstance": null},
+    {"id": "arret_transport",  "nom": "Arrêt de taxi / taxi-bus",           "categorie": "lieu", "circonstance": null},
+    {"id": "parking",          "nom": "Parking",                            "categorie": "lieu", "circonstance": null},
+    {"id": "autre",            "nom": "Autre (préciser en commentaire)",    "categorie": "lieu", "circonstance": null}
+  ]
+}

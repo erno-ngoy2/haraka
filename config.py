@@ -55,7 +55,14 @@ CIBLE = "niveau"
 FIREBASE_CLE_FICHIER = BASE / "firebase-cle.json"
 COLLECTION_ENVOIS = "envois"                 # 1 document = 1 envoi de l'app (jusqu'à 500 points)
 COLLECTION_SIGNALEMENTS = "signalements"
+COLLECTION_OBSERVATIONS = "observations"     # enregistrements manuels faits dans l'app
 MAX_POINTS_PAR_ENVOI = 500
+
+# --- Routes et signalements (fichiers partagés avec l'app Android) -----------
+# Même contenu dans haraka/app/src/main/assets/ : si tu modifies l'un, copie l'autre.
+ROUTES_JSON = DATA / "routes.json"                       # les 10 routes de départ
+TYPES_SIGNALEMENT_JSON = DATA / "types_signalement.json"  # bar, hôtel, accident...
+DISTANCE_MAX_ROUTE_M = 100   # à moins de ça d'une route, on considère qu'on est dessus
 
 # --- Historique et vie privée ------------------------------------------------
 # agregats.csv = l'historique DURABLE (une ligne par zone + date + heure, sans

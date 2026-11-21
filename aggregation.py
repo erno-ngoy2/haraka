@@ -26,6 +26,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
+import collecte
 import config
 import prevision
 import stockage
@@ -123,8 +124,10 @@ def resumer_brutes():
         n_points=("vitesse_kmh", "size"),
         n_appareils=("device", "nunique"))
 
-    # Circonstances : un signalement vaut pour DUREE_SIGNALEMENT_H heures
+    # Circonstances : un signalement d'INCIDENT vaut pour DUREE_SIGNALEMENT_H heures.
+    # Les lieux (bar, hôtel...) n'ont pas de circonstance : ils sont ignorés ici.
     g["circonstance"] = "normal"
+    sig = circonstances_signalements(sig)
     if not sig.empty:
         sig["ts"] = pd.to_datetime(sig["ts"], utc=True, format="ISO8601").dt.tz_convert(config.FUSEAU)
         sig["zone"] = cle_zone(sig.lat.astype(float), sig.lon.astype(float))
@@ -136,10 +139,26 @@ def resumer_brutes():
             s["heure"] = s.ts.dt.hour
             morceaux.append(s)
         sig = pd.concat(morceaux).drop_duplicates(["zone", "date", "heure"])
-        cle = sig.set_index(["zone", "date", "heure"])["type"].to_dict()
+        cle = sig.set_index(["zone", "date", "heure"])["circonstance"].to_dict()
         g["circonstance"] = [cle.get((z, d, h), "normal")
                              for z, d, h in zip(g.zone, g.date, g.heure)]
     return g
+
+
+def circonstances_signalements(sig):
+    """Garde les signalements qui changent la circonstance (incidents), avec la bonne valeur.
+    Anciens signalements sans colonne 'circonstance' : déduite du type via le catalogue."""
+    if sig.empty:
+        return sig
+    correspondance = {t["id"]: t["circonstance"] for t in collecte.catalogue()["types"]}
+    sig = sig.copy()
+    deduite = sig["type"].map(correspondance)
+    if "circonstance" in sig.columns:
+        sig["circonstance"] = sig["circonstance"].where(sig["circonstance"].notna(), deduite)
+    else:
+        sig["circonstance"] = deduite
+    return sig[sig["circonstance"].isin(config.CIRCONSTANCES)
+               & (sig["circonstance"] != "normal")].copy()
 
 
 # --- 3 : historique durable --------------------------------------------------
@@ -196,14 +215,30 @@ def construire_depuis_agregats(ag):
     return ajouter_calendrier(g)[COLONNES]
 
 
-def depuis_observations():
-    """Observations faites à la main (data/observations_manuelles.csv)."""
-    vide = pd.DataFrame(columns=COLONNES)
-    if not config.OBSERVATIONS_CSV.exists():
-        return vide
-    o = pd.read_csv(config.OBSERVATIONS_CSV)
+def observations_app():
+    """Enregistrements manuels envoyés par l'app (POST /observation) -> colonnes du CSV."""
+    o = stockage.lire_observations()
     if o.empty:
+        return pd.DataFrame(columns=["date", "heure", "x", "y", "niveau", "pluie", "circonstance"])
+    ts = pd.to_datetime(o["ts"], utc=True, format="ISO8601").dt.tz_convert(config.FUSEAU)
+    return pd.DataFrame({
+        "date": ts.dt.strftime("%Y-%m-%d"), "heure": ts.dt.hour,
+        "x": o["lat"].astype(float), "y": o["lon"].astype(float),
+        "niveau": o["niveau"], "pluie": o["pluie"], "circonstance": o["circonstance"],
+    })
+
+
+def depuis_observations():
+    """Observations faites à la main : data/observations_manuelles.csv + celles de l'app.
+    Les observations ne sont jamais purgées : ce sont des exemples saisis exprès."""
+    vide = pd.DataFrame(columns=COLONNES)
+    app = observations_app()
+    csv = pd.read_csv(config.OBSERVATIONS_CSV) if config.OBSERVATIONS_CSV.exists() else pd.DataFrame()
+    morceaux = [m for m in (app, csv) if not m.empty]
+    if not morceaux:
         return vide
+    o = pd.concat(morceaux, ignore_index=True)
+    print(f"  observations manuelles : {len(app)} depuis l'app, {len(csv)} depuis le fichier CSV")
     o = o[o["niveau"].isin(config.NIVEAUX)].copy()
     if o.empty:
         return vide

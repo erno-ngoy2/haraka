@@ -23,6 +23,9 @@ import config
 
 COLONNES_POSITIONS = ["device", "ts", "lat", "lon", "vitesse_kmh", "precision_m", "en_vehicule"]
 COLONNES_SIGNALEMENTS = ["device", "ts", "lat", "lon", "type"]
+COLONNES_OBSERVATIONS = ["device", "ts", "lat", "lon", "niveau", "pluie", "circonstance"]
+# Les autres champs (route, météo, commentaire, précision GPS...) sont rangés tels quels
+# dans Firestore, et dans la colonne "details" (texte JSON) en SQLite.
 
 
 class StockageIndisponible(Exception):
@@ -81,10 +84,51 @@ def _sqlite():
             device TEXT, ts TEXT, lat REAL, lon REAL,
             vitesse_kmh REAL, precision_m REAL, en_vehicule INTEGER);
         CREATE TABLE IF NOT EXISTS signalements(
-            device TEXT, ts TEXT, lat REAL, lon REAL, type TEXT);
+            device TEXT, ts TEXT, lat REAL, lon REAL, type TEXT, details TEXT);
+        CREATE TABLE IF NOT EXISTS observations(
+            device TEXT, ts TEXT, lat REAL, lon REAL, niveau TEXT, pluie INTEGER,
+            circonstance TEXT, details TEXT);
         CREATE INDEX IF NOT EXISTS idx_positions_ts ON positions(ts);
     """)
+    # Anciennes bases (avant la colonne "details") : on l'ajoute
+    colonnes = [c[1] for c in con.execute("PRAGMA table_info(signalements)")]
+    if "details" not in colonnes:
+        con.execute("ALTER TABLE signalements ADD COLUMN details TEXT")
     return con
+
+
+def _ajouter(collection, table, colonnes, doc):
+    """Firestore : tout le document. SQLite : colonnes principales + le reste en JSON."""
+    if _type_ou_erreur() == "firestore":
+        from google.cloud.firestore import SERVER_TIMESTAMP
+        _firestore().collection(collection).add({**doc, "recu_le": SERVER_TIMESTAMP})
+    else:
+        details = {k: v for k, v in doc.items() if k not in colonnes}
+        valeurs = tuple(doc.get(c) for c in colonnes) + (json.dumps(details, ensure_ascii=False),)
+        trous = ",".join("?" * (len(colonnes) + 1))
+        with closing(_sqlite()) as con, con:
+            con.execute(f"INSERT INTO {table} ({','.join(colonnes)},details) VALUES ({trous})", valeurs)
+
+
+def _lire(collection, table, colonnes):
+    if _type_ou_erreur() == "firestore":
+        lignes = [doc.to_dict() for doc in _firestore().collection(collection).stream()]
+        df = pd.DataFrame(lignes)
+        for c in colonnes:
+            if c not in df.columns:
+                df[c] = None
+        return df
+    if not config.DB.exists():
+        return pd.DataFrame(columns=colonnes)
+    with closing(_sqlite()) as con:
+        df = pd.read_sql(f"SELECT * FROM {table}", con)
+    if df.empty or "details" not in df.columns:
+        return df.drop(columns=["details"], errors="ignore")
+    # Lignes anciennes (avant la colonne "details") : valeur vide -> {}
+    extra = pd.json_normalize([json.loads(d) if isinstance(d, str) and d else {}
+                               for d in df["details"]], max_level=0)
+    return pd.concat([df.drop(columns=["details"]).reset_index(drop=True),
+                      extra.drop(columns=[c for c in extra.columns if c in df.columns])], axis=1)
 
 
 # --- Écriture (utilisée par collecte.py) -------------------------------------
@@ -104,15 +148,13 @@ def ajouter_points(device, points):
 
 
 def ajouter_signalement(s):
-    """s : dict déjà validé (device, ts, lat, lon, type)."""
-    if _type_ou_erreur() == "firestore":
-        from google.cloud.firestore import SERVER_TIMESTAMP
-        _firestore().collection(config.COLLECTION_SIGNALEMENTS).add(
-            {**s, "recu_le": SERVER_TIMESTAMP})
-    else:
-        with closing(_sqlite()) as con, con:
-            con.execute("INSERT INTO signalements VALUES (?,?,?,?,?)",
-                        tuple(s[c] for c in COLONNES_SIGNALEMENTS))
+    """s : dict déjà validé (device, ts, lat, lon, type + champs en plus)."""
+    _ajouter(config.COLLECTION_SIGNALEMENTS, "signalements", COLONNES_SIGNALEMENTS, s)
+
+
+def ajouter_observation(o):
+    """o : dict déjà validé (device, ts, lat, lon, niveau, pluie, circonstance + champs en plus)."""
+    _ajouter(config.COLLECTION_OBSERVATIONS, "observations", COLONNES_OBSERVATIONS, o)
 
 
 # --- Lecture (utilisée par aggregation.py) -----------------------------------
@@ -131,22 +173,24 @@ def lire_positions():
 
 
 def lire_signalements():
-    if _type_ou_erreur() == "firestore":
-        lignes = [doc.to_dict() for doc in
-                  _firestore().collection(config.COLLECTION_SIGNALEMENTS).stream()]
-        return pd.DataFrame(lignes, columns=COLONNES_SIGNALEMENTS)
-    if not config.DB.exists():
-        return pd.DataFrame(columns=COLONNES_SIGNALEMENTS)
-    with closing(_sqlite()) as con:
-        return pd.read_sql("SELECT * FROM signalements", con)
+    """Tous les signalements (colonnes principales + champs en plus : categorie, route...)."""
+    return _lire(config.COLLECTION_SIGNALEMENTS, "signalements", COLONNES_SIGNALEMENTS)
+
+
+def lire_observations():
+    """Enregistrements manuels faits dans l'app (niveau observé sur place)."""
+    return _lire(config.COLLECTION_OBSERVATIONS, "observations", COLONNES_OBSERVATIONS)
 
 
 # --- Vie privée : suppression des données brutes anciennes -------------------
 
 def purger_avant(limite):
-    """Supprime positions et signalements reçus avant `limite` (datetime UTC).
+    """Supprime positions et signalements d'INCIDENTS reçus avant `limite` (datetime UTC).
 
     À n'appeler qu'APRÈS avoir sauvegardé les agrégats (aggregation.py le fait).
+    Ne supprime PAS :
+      - les signalements de LIEUX (bar, hôtel...) : c'est un inventaire, pas un moment ;
+      - les observations manuelles : ce sont des exemples d'entraînement saisis exprès.
     Firestore : se base sur 'recu_le' (date de réception par le serveur).
     SQLite : se base sur 'ts' (date de la mesure).
     Retourne (nb_envois_ou_positions, nb_signalements) supprimés.
@@ -157,16 +201,23 @@ def purger_avant(limite):
         totaux = []
         for nom in (config.COLLECTION_ENVOIS, config.COLLECTION_SIGNALEMENTS):
             n = 0
+            dernier = None
             while True:
-                docs = list(db.collection(nom).where(filter=FieldFilter("recu_le", "<", limite))
-                            .limit(400).stream())
+                q = (db.collection(nom).where(filter=FieldFilter("recu_le", "<", limite))
+                     .order_by("recu_le").limit(400))
+                if dernier is not None:
+                    q = q.start_after(dernier)
+                docs = list(q.stream())
                 if not docs:
                     break
-                lot = db.batch()
-                for d in docs:
-                    lot.delete(d.reference)
-                lot.commit()
-                n += len(docs)
+                dernier = docs[-1]
+                a_supprimer = [d for d in docs if (d.to_dict() or {}).get("categorie") != "lieu"]
+                if a_supprimer:
+                    lot = db.batch()
+                    for d in a_supprimer:
+                        lot.delete(d.reference)
+                    lot.commit()
+                n += len(a_supprimer)
             totaux.append(n)
         return tuple(totaux)
     if not config.DB.exists():
@@ -174,5 +225,7 @@ def purger_avant(limite):
     seuil = limite.strftime("%Y-%m-%dT%H:%M:%S")
     with closing(_sqlite()) as con, con:
         n1 = con.execute("DELETE FROM positions WHERE ts < ?", (seuil,)).rowcount
-        n2 = con.execute("DELETE FROM signalements WHERE ts < ?", (seuil,)).rowcount
+        n2 = con.execute(
+            "DELETE FROM signalements WHERE ts < ? "
+            "AND COALESCE(json_extract(details, '$.categorie'), '') != 'lieu'", (seuil,)).rowcount
     return (n1, n2)
