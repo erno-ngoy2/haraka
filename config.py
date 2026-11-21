@@ -64,6 +64,20 @@ ROUTES_JSON = DATA / "routes.json"                       # les 10 routes de dép
 TYPES_SIGNALEMENT_JSON = DATA / "types_signalement.json"  # bar, hôtel, accident...
 DISTANCE_MAX_ROUTE_M = 100   # à moins de ça d'une route, on considère qu'on est dessus
 
+# Routes créées sur le terrain depuis l'app (numéros 11, 12, ...), rangées dans Firestore.
+COLLECTION_ROUTES = "routes"
+MAX_POINTS_ROUTE = 200          # points maximum par route créée
+LONGUEUR_MAX_NOM_ROUTE = 80
+# On refuse de créer une route quand on est déjà sur une route (à moins de
+# DISTANCE_MAX_ROUTE_M) ou avec le nom d'une route existante : évite les doublons.
+# Un point plus près que ça d'un point déjà enregistré n'est pas ajouté (inutile).
+DISTANCE_MIN_ENTRE_POINTS_M = 15
+# Un point ajouté à une route doit être à moins de ça de son tracé actuel
+# (sinon c'est probablement une autre route : en créer une nouvelle).
+DISTANCE_MAX_AJOUT_POINT_M = 1500
+# Les routes sont relues dans la base au plus toutes les N secondes (économie de lectures).
+CACHE_ROUTES_S = 60
+
 # --- Historique et vie privée ------------------------------------------------
 # agregats.csv = l'historique DURABLE (une ligne par zone + date + heure, sans
 # identifiant d'appareil). C'est lui qui sert à l'entraînement, pas les positions brutes.

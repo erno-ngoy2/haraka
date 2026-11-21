@@ -175,7 +175,98 @@ def observation():
 
 @bp.get("/routes")
 def liste_routes():
-    return jsonify(routes.charger())
+    """Les 10 routes de départ + celles créées sur le terrain (11, 12, ...)."""
+    d = routes.charger_depart()
+    return jsonify({k: v for k, v in d.items() if k != "routes"} | {"routes": routes.liste()})
+
+
+def _normaliser_nom(nom):
+    return " ".join(str(nom).lower().replace("avenue", "av").replace("av.", "av")
+                    .replace("boulevard", "bd").replace("bd.", "bd").split())
+
+
+@bp.post("/routes")
+def creer_route():
+    """Crée une route qui ne fait pas encore partie de la liste, à partir du point où l'on est."""
+    if not cle_ok():
+        return jsonify({"erreur": "clé invalide"}), 401
+    d = request.get_json(silent=True) or {}
+    try:
+        nom = " ".join(str(d["nom"]).split())[:config.LONGUEUR_MAX_NOM_ROUTE]
+        if len(nom) < 3:
+            raise ValueError("nom")
+        base = base_commune(d)
+    except (KeyError, ValueError, TypeError):
+        return jsonify({"erreur": "champs requis : nom (3 caractères minimum), ts, lat, lon"}), 400
+
+    toutes = routes.liste(rafraichir=True)
+    proche = routes.plus_proche(base["lat"], base["lon"], toutes)
+    if proche["sur_la_route"]:
+        return jsonify({"erreur": f"Tu es déjà sur la route {proche['id']} ({proche['nom']}), "
+                                  f"à {proche['distance_m']} m.", "route": proche}), 409
+    meme_nom = [r for r in toutes if _normaliser_nom(r["nom"]) == _normaliser_nom(nom)]
+    if meme_nom:
+        r = meme_nom[0]
+        return jsonify({"erreur": f"La route « {r['nom']} » existe déjà (n° {r['id']}) : "
+                                  "ajoute plutôt ce point à cette route.",
+                        "route": {"id": r["id"], "nom": r["nom"]}}), 409
+
+    doc = {"nom": nom, "description": str(d.get("description") or "").strip()[:200],
+           "points": [{"lat": base["lat"], "lon": base["lon"], "ts": base["ts"], "device": base["device"]}],
+           "cree_par": base["device"], "cree_le": base["ts"]}
+    if "contexte" in base:
+        doc["contexte_creation"] = base["contexte"]
+    try:
+        numero = stockage.creer_route(doc, routes.prochain_numero_minimum())
+    except stockage.StockageIndisponible as e:
+        return jsonify({"erreur": str(e)}), 503
+    routes.invalider_cache()
+    return jsonify({"ok": True, "route": {"id": numero, "nom": nom, "points": 1}}), 201
+
+
+@bp.post("/routes/<int:numero>/points")
+def ajouter_point(numero):
+    """Ajoute le point où l'on est au tracé d'une route créée sur le terrain."""
+    if not cle_ok():
+        return jsonify({"erreur": "clé invalide"}), 401
+    if numero < routes.prochain_numero_minimum():
+        return jsonify({"erreur": "Les 10 routes de départ ne se modifient pas."}), 403
+    d = request.get_json(silent=True) or {}
+    try:
+        base = base_commune(d)
+    except (KeyError, ValueError, TypeError):
+        return jsonify({"erreur": "champs requis : ts, lat, lon"}), 400
+    route = next((r for r in routes.liste(rafraichir=True) if r["id"] == numero), None)
+    if route is None:
+        return jsonify({"erreur": f"Route {numero} introuvable."}), 404
+    distance = routes.distance_trace_m(base["lat"], base["lon"], route["points"])
+    if distance > config.DISTANCE_MAX_AJOUT_POINT_M:
+        return jsonify({"erreur": f"Ce point est à {round(distance)} m de la route {numero} : "
+                                  "c'est sans doute une autre route, crée-la plutôt."}), 400
+    if len(route["points"]) >= config.MAX_POINTS_ROUTE:
+        return jsonify({"erreur": f"La route {numero} a déjà {config.MAX_POINTS_ROUTE} points."}), 400
+
+    nouveau = {"lat": base["lat"], "lon": base["lon"], "ts": base["ts"], "device": base["device"]}
+    ajoute = {"fait": False}
+
+    def transformer(points):
+        deja_la = any(
+            routes.distance_trace_m(nouveau["lat"], nouveau["lon"], [{"latitude": p["lat"], "longitude": p["lon"]}])
+            < config.DISTANCE_MIN_ENTRE_POINTS_M for p in points)
+        if deja_la:
+            return points  # un point existe déjà à cet endroit
+        ajoute["fait"] = True
+        return routes.inserer_point(points, nouveau)
+
+    try:
+        maj = stockage.modifier_points_route(numero, transformer)
+    except stockage.StockageIndisponible as e:
+        return jsonify({"erreur": str(e)}), 503
+    if maj is None:
+        return jsonify({"erreur": f"Route {numero} introuvable."}), 404
+    routes.invalider_cache()
+    return jsonify({"ok": True, "ajoute": ajoute["fait"],
+                    "route": {"id": numero, "nom": maj["nom"], "points": len(maj["points"])}})
 
 
 @bp.get("/signalement/types")

@@ -88,6 +88,8 @@ def _sqlite():
         CREATE TABLE IF NOT EXISTS observations(
             device TEXT, ts TEXT, lat REAL, lon REAL, niveau TEXT, pluie INTEGER,
             circonstance TEXT, details TEXT);
+        CREATE TABLE IF NOT EXISTS routes(
+            id INTEGER PRIMARY KEY, nom TEXT, points TEXT, details TEXT);
         CREATE INDEX IF NOT EXISTS idx_positions_ts ON positions(ts);
     """)
     # Anciennes bases (avant la colonne "details") : on l'ajoute
@@ -229,3 +231,77 @@ def purger_avant(limite):
             "DELETE FROM signalements WHERE ts < ? "
             "AND COALESCE(json_extract(details, '$.categorie'), '') != 'lieu'", (seuil,)).rowcount
     return (n1, n2)
+
+
+# --- Routes créées depuis l'app (11, 12, ...) ----------------------------------
+# Les 10 routes de départ restent dans data/routes.json (fixes). Les routes créées
+# sur le terrain sont rangées ici : {"id", "nom", "points": [{"lat", "lon", "ts"}...], ...}.
+# Elles ne sont jamais purgées.
+
+def lister_routes_creees():
+    if _type_ou_erreur() == "firestore":
+        docs = _firestore().collection(config.COLLECTION_ROUTES).stream()
+        routes = [d.to_dict() for d in docs]
+    else:
+        if not config.DB.exists():
+            return []
+        with closing(_sqlite()) as con:
+            lignes = con.execute("SELECT id, nom, points, details FROM routes ORDER BY id").fetchall()
+        routes = [{**json.loads(details or "{}"), "id": i, "nom": nom, "points": json.loads(points)}
+                  for i, nom, points, details in lignes]
+    return sorted((r for r in routes if "id" in r), key=lambda r: r["id"])
+
+
+def creer_route(doc, id_minimum):
+    """Crée la route et lui donne le numéro suivant (au moins id_minimum). Retourne le numéro.
+    Firestore : un compteur dans une transaction, pour que deux téléphones n'aient jamais le même."""
+    if _type_ou_erreur() == "firestore":
+        from google.cloud import firestore as gfs
+        db = _firestore()
+        compteur = db.collection("compteurs").document("routes")
+
+        @gfs.transactional
+        def creer(transaction):
+            snap = compteur.get(transaction=transaction)
+            dernier = (snap.to_dict() or {}).get("dernier", 0) if snap.exists else 0
+            numero = max(dernier + 1, id_minimum)
+            transaction.set(compteur, {"dernier": numero})
+            transaction.set(db.collection(config.COLLECTION_ROUTES).document(str(numero)),
+                            {**doc, "id": numero, "cree_le_serveur": gfs.SERVER_TIMESTAMP})
+            return numero
+
+        return creer(db.transaction())
+    with closing(_sqlite()) as con, con:
+        dernier = con.execute("SELECT MAX(id) FROM routes").fetchone()[0] or 0
+        numero = max(dernier + 1, id_minimum)
+        extra = {k: v for k, v in doc.items() if k not in ("nom", "points")}
+        con.execute("INSERT INTO routes (id, nom, points, details) VALUES (?,?,?,?)",
+                    (numero, doc["nom"], json.dumps(doc["points"]), json.dumps(extra, ensure_ascii=False)))
+    return numero
+
+
+def modifier_points_route(numero, transformer):
+    """Remplace les points de la route par transformer(points). Retourne la route, ou None."""
+    if _type_ou_erreur() == "firestore":
+        from google.cloud import firestore as gfs
+        db = _firestore()
+        ref = db.collection(config.COLLECTION_ROUTES).document(str(numero))
+
+        @gfs.transactional
+        def modifier(transaction):
+            snap = ref.get(transaction=transaction)
+            if not snap.exists:
+                return None
+            route = snap.to_dict()
+            route["points"] = transformer(route.get("points", []))
+            transaction.update(ref, {"points": route["points"]})
+            return route
+
+        return modifier(db.transaction())
+    with closing(_sqlite()) as con, con:
+        ligne = con.execute("SELECT nom, points, details FROM routes WHERE id = ?", (numero,)).fetchone()
+        if ligne is None:
+            return None
+        points = transformer(json.loads(ligne[1]))
+        con.execute("UPDATE routes SET points = ? WHERE id = ?", (json.dumps(points), numero))
+    return {**json.loads(ligne[2] or "{}"), "id": numero, "nom": ligne[0], "points": points}
