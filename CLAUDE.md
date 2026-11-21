@@ -105,6 +105,8 @@ Pour tester depuis l'app : émulateur Android = `http://10.0.2.2:5000` ; vrai t�
 - [ ] **App Android : service de collecte GPS** (Foreground Service, FusedLocationProvider, mode conduite, envoi par lots avec WorkManager)
 - [x] App Android (`D:\projet haraka\haraka`, pas dans ce dépôt) : écran **Entraînement** (contexte capté : position, précision, route parmi les 10, date, heure, jour, férié, météo Open-Meteo ; enregistrement manuel ; bouton Signaler avec menu incidents / lieux ; file d'attente hors réseau) et écran **Visualisation** (carte schématique des 10 routes colorée à l'heure actuelle, prévisions détaillées par route). Testée sur Infinix X657 (Android 10) le 2026-11-21.
 - [x] Routes créées sur le terrain (11, 12...) et carte OpenStreetMap interactive (osmdroid) dans la Visualisation (2026-11-21)
+- [x] Carte « maison » (2026-11-21) : plus de fond de carte. Toutes les routes (10 de départ, 599 rues du catalogue `data/rues_lubumbashi.json` ids 1001+, routes créées 11+) prennent leur forme avec les points relevés : `route_id` dans /observation et /signalement, ou /routes/<n>/points. Seuils (config.py) : 4 points = dessinée, 6 = état en temps réel, 11 = prête. `GET /carte` : avancement par rue, cartographie (%), IA (% = jours/14, observations/500, modèle réel) et état en temps réel (observation < 60 min, sinon prévision) seulement à partir de 6 points.
+- [ ] vercel.json : `excludeFiles` doit rester sous 256 caractères (sinon le déploiement échoue)
 - [ ] App : service de collecte GPS automatique en conduite (Foreground Service + envoi par lots)
 - [ ] App : tester un vrai envoi (signalement / observation) depuis le téléphone, dehors (GPS précis)
 - [x] Ville de départ : Lubumbashi (2026-11-21)
