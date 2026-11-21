@@ -1,0 +1,11 @@
+mois_jour,nom,effet,heure_debut,heure_fin
+01-01,Nouvel an,embouteillage,17,20
+01-04,Martyrs de l'Indépendance,calme,,
+01-16,Laurent-Désiré Kabila,a_observer,,
+01-17,Patrice Emery Lumumba,a_observer,,
+04-06,Simon Kimbangu,a_observer,,
+05-01,Fête du Travail,a_observer,,
+05-17,Forces Armées,a_observer,,
+06-30,Indépendance,a_observer,,
+08-01,Fête des Parents,a_observer,,
+12-25,Noël,embouteillage,17,20

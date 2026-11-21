@@ -1,0 +1,18 @@
+venv/
+__pycache__/
+*.pyc
+
+# Données locales (jamais sur GitHub)
+trafic.db
+trafic.csv
+
+# Clés secrètes : NE JAMAIS COMMITTER
+firebase-cle.json
+*firebase-adminsdk*.json
+.env
+.env.*
+
+# Vercel
+.vercel/
+
+# Note : model_trafic.joblib EST committé (Vercel en a besoin pour /previsions).
