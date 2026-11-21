@@ -16,3 +16,12 @@ firebase-cle.json
 .vercel/
 
 # Note : model_trafic.joblib EST committé (Vercel en a besoin pour /previsions).
+
+# Historique local (données d'entraînement) : sauvegarde-le, mais pas sur GitHub
+data/agregats.csv
+trafic_info.json
+*.tmp
+
+# Ancien modèle (retour arrière local) et mode simulation
+model_trafic.precedent.joblib
+simulation/

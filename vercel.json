@@ -2,7 +2,7 @@
   "regions": ["fra1"],
   "functions": {
     "app.py": {
-      "excludeFiles": "{venv/**,trafic.csv,trafic.db,generer_donnees_test.py,test_api.py,aggregation.py,train.py,CLAUDE.md,README.md}"
+      "excludeFiles": "{venv/**,simulation/**,rapports/**,trafic.csv,trafic.db,trafic_info.json,data/agregats.csv,data/observations_manuelles.csv,model_trafic.precedent.joblib,generer_donnees_test.py,simuler_gps.py,test_api.py,aggregation.py,train.py,CLAUDE.md,README.md}"
     }
   }
 }

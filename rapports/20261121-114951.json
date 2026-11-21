@@ -1,0 +1,79 @@
+{
+  "version": "20261121-114951",
+  "date": "2026-11-21T11:49:51+00:00",
+  "decision": "publié",
+  "raisons_refus": [],
+  "source": "test",
+  "donnees": {},
+  "decoupage": "aléatoire (pas de colonne 'date' : données de test)",
+  "lignes_entrainement": 24000,
+  "lignes_test": 6000,
+  "test": {
+    "lignes": 6000,
+    "exactitude": 0.83,
+    "f1_macro": 0.787,
+    "rappel_embouteillage": 0.86
+  },
+  "references": {
+    "classe_frequente": {
+      "lignes": 6000,
+      "exactitude": 0.591,
+      "f1_macro": 0.248,
+      "rappel_embouteillage": 0.0
+    },
+    "habitude": {
+      "lignes": 6000,
+      "exactitude": 0.702,
+      "f1_macro": 0.455,
+      "rappel_embouteillage": 0.015
+    }
+  },
+  "comparaison_modele_publie": {
+    "statut": "modèle publié d'une autre source (inconnue) : pas de comparaison",
+    "version_publiee": "ancien"
+  },
+  "matrice_confusion": {
+    "ordre": [
+      "fluide",
+      "dense",
+      "embouteillage"
+    ],
+    "valeurs": [
+      [
+        3136,
+        409,
+        3
+      ],
+      [
+        233,
+        1340,
+        292
+      ],
+      [
+        0,
+        82,
+        505
+      ]
+    ]
+  },
+  "informations_utiles": {
+    "heure": 0.383,
+    "pluie": 0.118,
+    "circonstance_normal": 0.109,
+    "y": 0.099,
+    "x": 0.098,
+    "jour_semaine": 0.078,
+    "circonstance_accident": 0.058,
+    "circonstance_travaux": 0.024
+  },
+  "parametres": {
+    "n_arbres": 100,
+    "feuille_min": 5
+  },
+  "versions": {
+    "python": "3.13.3",
+    "scikit-learn": "1.9.1",
+    "pandas": "3.1.1",
+    "numpy": "2.5.5"
+  }
+}

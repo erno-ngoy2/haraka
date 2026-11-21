@@ -43,7 +43,12 @@ def _cle_firebase():
 
 
 def type_stockage():
-    """'firestore', 'sqlite', ou None si rien n'est utilisable."""
+    """'firestore', 'sqlite', ou None si rien n'est utilisable.
+
+    HARAKA_STOCKAGE=sqlite force la base locale même si firebase-cle.json existe
+    (pour les essais et la simulation, sans toucher aux vraies données)."""
+    if config.SIMULATION or os.environ.get("HARAKA_STOCKAGE", "").lower() == "sqlite":
+        return "sqlite"
     if _cle_firebase() is not None:
         return "firestore"
     if os.environ.get("VERCEL"):  # disque non permanent : SQLite perdrait les données
@@ -134,3 +139,40 @@ def lire_signalements():
         return pd.DataFrame(columns=COLONNES_SIGNALEMENTS)
     with closing(_sqlite()) as con:
         return pd.read_sql("SELECT * FROM signalements", con)
+
+
+# --- Vie privée : suppression des données brutes anciennes -------------------
+
+def purger_avant(limite):
+    """Supprime positions et signalements reçus avant `limite` (datetime UTC).
+
+    À n'appeler qu'APRÈS avoir sauvegardé les agrégats (aggregation.py le fait).
+    Firestore : se base sur 'recu_le' (date de réception par le serveur).
+    SQLite : se base sur 'ts' (date de la mesure).
+    Retourne (nb_envois_ou_positions, nb_signalements) supprimés.
+    """
+    if _type_ou_erreur() == "firestore":
+        from google.cloud.firestore_v1.base_query import FieldFilter
+        db = _firestore()
+        totaux = []
+        for nom in (config.COLLECTION_ENVOIS, config.COLLECTION_SIGNALEMENTS):
+            n = 0
+            while True:
+                docs = list(db.collection(nom).where(filter=FieldFilter("recu_le", "<", limite))
+                            .limit(400).stream())
+                if not docs:
+                    break
+                lot = db.batch()
+                for d in docs:
+                    lot.delete(d.reference)
+                lot.commit()
+                n += len(docs)
+            totaux.append(n)
+        return tuple(totaux)
+    if not config.DB.exists():
+        return (0, 0)
+    seuil = limite.strftime("%Y-%m-%dT%H:%M:%S")
+    with closing(_sqlite()) as con, con:
+        n1 = con.execute("DELETE FROM positions WHERE ts < ?", (seuil,)).rowcount
+        n2 = con.execute("DELETE FROM signalements WHERE ts < ?", (seuil,)).rowcount
+    return (n1, n2)

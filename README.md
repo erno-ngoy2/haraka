@@ -73,11 +73,70 @@ Avec `TRAFIC_CLE`, définis-la d'abord dans le terminal : `$env:TRAFIC_CLE = "..
 
    `niveau` : fluide, dense ou embouteillage. `pluie` : 0 ou 1. `circonstance` : normal, accident, travaux, evenement.
 
-2. Chaque jour, sur le PC (avec `firebase-cle.json`) : `venv\Scripts\python aggregation.py`
-   lit Firestore et fabrique `trafic.csv`.
-3. Chaque semaine : `venv\Scripts\python train.py`, puis
-   `git add model_trafic.joblib && git commit -m "Nouveau modèle" && git push` → Vercel redéploie.
-4. Quand le modèle vient de **vraies** données : mets `MODELE_DONNEES_TEST = False` dans `config.py`.
+2. **Chaque jour**, sur le PC (avec `firebase-cle.json`) :
+
+   ```powershell
+   venv\Scripts\python aggregation.py
+   ```
+
+   Il lit Firestore, ajoute la journée à l'historique `data/agregats.csv`, fabrique
+   `trafic.csv` puis **supprime les positions brutes de plus de 30 jours** (vie privée).
+   ⚠️ `data/agregats.csv` devient alors la seule copie de l'historique : sauvegarde-le
+   régulièrement (clé USB, Google Drive...).
+
+3. **Chaque semaine** :
+
+   ```powershell
+   venv\Scripts\python train.py
+   ```
+
+   - Il apprend sur les jours anciens et teste sur les 20 % de jours les plus récents.
+   - Il compare le modèle à deux méthodes simples et au modèle déjà en ligne.
+   - Il **refuse de publier** (code 2, le modèle en ligne reste) si : moins de 500 lignes
+     ou de 14 jours, pas mieux que « toujours le niveau le plus fréquent », ou plus de
+     2 points de F1 macro perdus face au modèle en ligne.
+   - Rapport détaillé dans `rapports/AAAAMMJJ-HHMMSS.json`.
+
+   Si c'est publié :
+
+   ```powershell
+   git add model_trafic.joblib rapports; git commit -m "Nouveau modèle"; git push
+   ```
+
+   Vercel redéploie tout seul. `donnees_test` passe automatiquement à `false` dès que le
+   modèle vient de vraies données (`aggregation.py`).
+
+4. Revenir au modèle précédent si besoin : `model_trafic.precedent.joblib` (copie automatique)
+   → renomme-le en `model_trafic.joblib`, puis commit et push.
+
+## Tester comme en production (simulation)
+
+`simuler_gps.py` invente des semaines de positions GPS (axes, téléphones, heures de pointe,
+accidents) et rejoue **tout** le pipeline dans le dossier `simulation/`, sans toucher aux
+vrais fichiers ni à Firebase :
+
+```powershell
+$env:HARAKA_SIMULATION = "1"
+venv\Scripts\python simuler_gps.py --jours 35 --reset
+venv\Scripts\python aggregation.py
+venv\Scripts\python train.py
+venv\Scripts\python app.py
+Remove-Item Env:HARAKA_SIMULATION
+```
+
+Essaie aussi `--jours 10 --reset` (le modèle doit être refusé : moins de 14 jours), puis
+`--decalage` pour simuler des jours qui arrivent ensuite.
+
+## Jours fériés (`data/feries.csv`)
+
+| colonne | exemple | sens |
+|---|---|---|
+| `jour` | `12-25` ou `2026-01-05` | `MM-JJ` = chaque année ; `AAAA-MM-JJ` = cette date seulement (reports) |
+| `effet` | `embouteillage` / `calme` / `a_observer` | règle appliquée par-dessus le modèle |
+| `creneaux` | `11-14;16-22` | heures d'embouteillage (de 11h00 à 14h00 puis de 16h00 à 22h00) |
+| `zones` | texte | lieux concernés (information) |
+
+**Chaque année**, ajoute les reports des fériés tombés un week-end (ex. `2027-...`).
 
 ## Format des requêtes
 
@@ -98,8 +157,13 @@ Avec `TRAFIC_CLE`, définis-la d'abord dans le terminal : `$env:TRAFIC_CLE = "..
  "pluie": 1, "circonstance": "normal", "nb_heures": 6}
 ```
 
-Réponse : `donnees_test`, liste `previsions` (heure, niveau, risque_embouteillage, probabilites)
-et `meilleure_heure`.
+Réponse :
+- `previsions` (heure, niveau, risque_embouteillage, probabilites, ajuste_par_regle) et `meilleure_heure` ;
+- `donnees_test` : `true` = modèle de test, **ne pas montrer au public** ;
+- `zone_connue` / `distance_zone_m` : `false` = point loin de toute zone vue à l'entraînement
+  (le modèle devine, **ne pas montrer**) ;
+- `modele` : version, date d'entraînement, période couverte, F1 macro au test ;
+- `jour_ferie` : nom, effet et zones concernées si c'est un jour férié.
 
 ## Remarques
 

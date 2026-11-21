@@ -1,7 +1,7 @@
 """Serveur Haraka : collecte + prévisions dans une seule application Flask.
 
 Vercel trouve tout seul ce fichier et la variable `app`.
-En local : python app.py   (écoute sur le port 5000)
+En local : python app.py   (écoute sur le port 5000, ou sur $env:PORT)
 
 Routes :
     GET  /              description du service
@@ -12,7 +12,7 @@ Routes :
 """
 from flask import Flask, jsonify
 
-import config
+import prevision
 import stockage
 from api import bp as bp_previsions
 from collecte import bp as bp_collecte
@@ -37,13 +37,19 @@ def sante():
         base = stockage.type_stockage() or "non configurée"
     except stockage.StockageIndisponible as e:
         base = f"erreur : {e}"
+    try:
+        modele = prevision.infos_modele()
+    except FileNotFoundError:
+        modele = None
     return jsonify({
         "ok": True,
-        "modele_present": config.MODELE.exists(),
-        "donnees_test": config.MODELE_DONNEES_TEST,
+        "modele_present": modele is not None,
+        "donnees_test": True if modele is None else modele["donnees_test"],
+        "modele": modele,
         "stockage": base,
     })
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    import os
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

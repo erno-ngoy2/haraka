@@ -53,5 +53,7 @@ df["niveau"] = pd.cut(
     score, bins=[-np.inf, 1.8, 3.6, np.inf], labels=config.NIVEAUX).astype(str)
 
 df.to_csv(config.TRAFIC_CSV, index=False)
+# Marque trafic.csv comme artificiel : train.py publiera un modèle "donnees_test"
+config.TRAFIC_INFO.write_text('{"source": "test"}', encoding="utf-8")
 print(f"{len(df)} lignes écrites dans {config.TRAFIC_CSV.name}")
 print(df.niveau.value_counts(normalize=True).round(2))

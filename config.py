@@ -1,4 +1,5 @@
 """Configuration commune à tous les scripts. Modifie ici, pas ailleurs."""
+import os
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
@@ -55,14 +56,53 @@ COLLECTION_ENVOIS = "envois"                 # 1 document = 1 envoi de l'app (ju
 COLLECTION_SIGNALEMENTS = "signalements"
 MAX_POINTS_PAR_ENVOI = 500
 
+# --- Historique et vie privée ------------------------------------------------
+# agregats.csv = l'historique DURABLE (une ligne par zone + date + heure, sans
+# identifiant d'appareil). C'est lui qui sert à l'entraînement, pas les positions brutes.
+# Il n'est PAS sur GitHub : fais-en une copie de sauvegarde régulière (clé USB, Drive...).
+AGREGATS_CSV = DATA / "agregats.csv"
+TRAFIC_INFO = BASE / "trafic_info.json"      # d'où vient trafic.csv (réel ou test)
+# Les positions brutes plus vieilles que ça sont supprimées après agrégation.
+RETENTION_BRUTES_JOURS = 30
+# Les jours récents sont recalculés à chaque passage (des envois arrivent en retard
+# quand le téléphone n'a pas de connexion). Au-delà, un jour déjà agrégé est figé.
+FENETRE_RECALCUL_JOURS = 7
+
 # --- Modèle ------------------------------------------------------------------
 # 100 arbres, 5 exemples minimum par feuille, fichier compressé : environ 6 Mo
 # (contre 96 Mo avec 200 arbres / feuille de 2) pour moins d'un point de précision perdu.
 # Le fichier doit rester petit : il est envoyé sur GitHub et chargé par Vercel.
 N_ARBRES = 100
 FEUILLE_MIN = 5
+MODELE_PRECEDENT = BASE / "model_trafic.precedent.joblib"  # pour revenir en arrière
+RAPPORTS = BASE / "rapports"                 # un rapport JSON par entraînement
 
-# True tant que le modèle publié est entraîné sur generer_donnees_test.py.
-# L'API l'indique dans chaque réponse ("donnees_test"). Passe à False seulement
-# après un train.py sur de vraies données (aggregation.py).
-MODELE_DONNEES_TEST = True
+# --- Garde-fous de l'entraînement (données réelles seulement) ----------------
+MIN_LIGNES_ENTRAINEMENT = 500   # lignes zone + heure fiables
+MIN_JOURS_ENTRAINEMENT = 14     # jours différents (pour voir au moins 2 semaines)
+PART_TEST = 0.2                 # 20 % des jours les plus récents servent au test
+MIN_LIGNES_COMPARAISON = 50     # pour comparer l'ancien et le nouveau modèle
+TOLERANCE_REGRESSION = 0.02     # le nouveau peut perdre au plus 2 points de F1 macro
+
+# --- Prévisions --------------------------------------------------------------
+# Si le point demandé est à plus de cette distance de toute zone vue à l'entraînement,
+# la prévision est marquée "zone_connue": false (le modèle devine, ne pas l'afficher).
+DISTANCE_MAX_ZONE_M = 300
+
+# --- Mode simulation (HARAKA_SIMULATION=1) ------------------------------------
+# Rejoue tout le pipeline de production (simuler_gps.py -> aggregation.py -> train.py
+# -> app.py) avec des positions GPS inventées, dans le dossier simulation/ :
+# base SQLite, historique, trafic.csv, modèle et rapports y sont séparés des vrais.
+# Firebase n'est jamais utilisé et le modèle obtenu est marqué "donnees_test".
+SIMULATION = os.environ.get("HARAKA_SIMULATION") == "1"
+if SIMULATION:
+    SORTIE_SIMULATION = BASE / "simulation"
+    SORTIE_SIMULATION.mkdir(exist_ok=True)
+    DB = SORTIE_SIMULATION / "trafic.db"
+    AGREGATS_CSV = SORTIE_SIMULATION / "agregats.csv"
+    TRAFIC_CSV = SORTIE_SIMULATION / "trafic.csv"
+    TRAFIC_INFO = SORTIE_SIMULATION / "trafic_info.json"
+    MODELE = SORTIE_SIMULATION / "model_trafic.joblib"
+    MODELE_PRECEDENT = SORTIE_SIMULATION / "model_trafic.precedent.joblib"
+    RAPPORTS = SORTIE_SIMULATION / "rapports"
+    OBSERVATIONS_CSV = SORTIE_SIMULATION / "observations_manuelles.csv"  # n'existe pas : ignoré

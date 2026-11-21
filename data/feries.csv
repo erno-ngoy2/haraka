@@ -1,11 +1,16 @@
-mois_jour,nom,effet,heure_debut,heure_fin
-01-01,Nouvel an,embouteillage,17,20
-01-04,Martyrs de l'Indépendance,calme,,
-01-16,Laurent-Désiré Kabila,a_observer,,
-01-17,Patrice Emery Lumumba,a_observer,,
-04-06,Simon Kimbangu,a_observer,,
-05-01,Fête du Travail,a_observer,,
-05-17,Forces Armées,a_observer,,
-06-30,Indépendance,a_observer,,
-08-01,Fête des Parents,a_observer,,
-12-25,Noël,embouteillage,17,20
+jour,nom,effet,creneaux,zones
+01-01,Nouvel An,embouteillage,13-22,"Lieux de loisirs, restaurants, grands axes vers les quartiers résidentiels"
+01-04,Martyrs de l'Indépendance,calme,,Trafic fluide (sauf brèves déviations lors des cérémonies officielles)
+2026-01-05,Report des Martyrs de l'Indépendance (4 janvier),calme,,Trafic très léger
+01-16,Héros national L.D. Kabila,calme,,Trafic fluide
+01-17,Héros national P.E. Lumumba,calme,,Trafic fluide (déviations ponctuelles autour des monuments)
+2026-01-19,Report de P.E. Lumumba (17 janvier),calme,,Trafic très léger
+04-06,Combat de Simon Kimbangu,embouteillage,10-14,Abords des paroisses kimbanguistes et grands carrefours attenants
+05-01,Fête du Travail,embouteillage,14-21,"Terrasses, espaces festifs et axes menant aux lieux de détente"
+05-17,Journée de la Révolution / FARDC,calme,,Trafic fluide (fermetures temporaires possibles près des places de défilés)
+2026-05-18,Report de la Journée de la Révolution (17 mai),calme,,Trafic très léger
+06-30,Fête de l'Indépendance,embouteillage,13-22,"Centres-villes, espaces de loisirs, grands boulevards et sorties de ville"
+08-01,Fête des Parents,embouteillage,11-15,Cimetières et voies d'accès directes (ex. route de Kasenga à Lubumbashi)
+2026-08-03,Report de la Fête des Parents (1er août),calme,,Trafic très léger
+11-17,Journée de l'Armée,calme,,Trafic fluide
+12-25,Noël,embouteillage,11-14;16-22,"Églises à la sortie des cultes, puis centres commerciaux et lieux de fête"

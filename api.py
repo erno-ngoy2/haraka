@@ -6,7 +6,11 @@ POST /previsions
                 "pluie": 1,                  (optionnel, 0 ou 1)
                 "circonstance": "normal",    (optionnel : normal/accident/travaux/evenement)
                 "nb_heures": 6}              (optionnel)
-  La réponse contient "donnees_test": true tant que le modèle vient de données artificielles.
+  La réponse indique aussi :
+    "donnees_test" : true tant que le modèle vient de données artificielles ;
+    "zone_connue"  : false si le point est loin de toute zone vue à l'entraînement
+                     (le modèle devine : l'app ne doit pas afficher la prévision) ;
+    "modele"       : version, date d'entraînement, période couverte, score au test.
 """
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
@@ -40,9 +44,15 @@ def route_previsions():
         return jsonify({"erreur": "Champs requis : x, y, heure_depart (0-23). "
                                   "Optionnels : date (AAAA-MM-JJ), pluie, circonstance, nb_heures."}), 400
 
+    infos = prevision.infos_modele()
+    distance = prevision.distance_zone_connue_m(x, y)
     return jsonify({
         "date": jour.isoformat(),
-        "donnees_test": config.MODELE_DONNEES_TEST,
+        "donnees_test": infos["donnees_test"],
+        "zone_connue": None if distance is None else distance <= config.DISTANCE_MAX_ZONE_M,
+        "distance_zone_m": None if distance is None else round(distance),
+        "modele": infos,
+        "jour_ferie": prevision.info_ferie(jour),
         "previsions": res,
         "meilleure_heure": prevision.meilleure_heure(res),
     })
