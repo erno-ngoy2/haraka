@@ -134,10 +134,11 @@ def enregistrer(fonction, doc):
 
 
 def _point(doc, d=None):
-    """Point de tracé. Saisi à la main (coordonnées tapées) : marqué "saisie": "manuelle"."""
+    """Point de tracé. Origine notée dans "saisie" : "manuelle" (coordonnées tapées) ou
+    "direct" (cartographie en direct pendant la conduite) ; absent = position au moment d'un clic."""
     p = {"lat": doc["lat"], "lon": doc["lon"], "ts": doc["ts"], "device": doc["device"]}
-    if d is not None and d.get("saisie") == "manuelle":
-        p["saisie"] = "manuelle"
+    if d is not None and d.get("saisie") in ("manuelle", "direct"):
+        p["saisie"] = d["saisie"]
     return p
 
 
