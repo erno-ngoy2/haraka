@@ -90,6 +90,11 @@ POSITIONS_PAR_EXEMPLE = 5
 # toutes les routes : rangés dans Firestore (un document par route).
 COLLECTION_ROUTES = "routes"
 MAX_POINTS_ROUTE = 200          # points maximum par route créée
+# Tracé de forme (cartographie en direct, une position toutes les 2 s) : sert à dessiner la
+# FORME EXACTE de la rue, ne compte PAS dans l'avancement (seuls les « points » comptent).
+DISTANCE_MIN_TRACE_M = 8        # une position à moins de ça du tracé existant est ignorée
+TOLERANCE_TRACE_M = 4           # simplification : on garde la forme à 4 m près
+MAX_POINTS_TRACE = 1500         # points maximum du tracé d'une rue
 LONGUEUR_MAX_NOM_ROUTE = 80
 # On refuse de créer une route quand on est déjà sur une route (à moins de
 # DISTANCE_MAX_ROUTE_M) ou avec le nom d'une route existante : évite les doublons.

@@ -301,6 +301,38 @@ def ajouter_point(numero):
                     "route": {"id": numero, "nom": maj["nom"], **routes.statut(len(maj["points"]))}})
 
 
+@bp.post("/routes/<int:numero>/trace")
+def ajouter_trace(numero):
+    """Positions de la cartographie en direct (toutes les 2 s) : elles donnent la FORME exacte
+    de la rue et ne comptent PAS dans son avancement. Corps : {"device", "points": [{ts, lat, lon, precision_m}]}."""
+    if not cle_ok():
+        return jsonify({"erreur": "clé invalide"}), 401
+    d = request.get_json(silent=True) or {}
+    points = d.get("points", [])
+    if not isinstance(points, list):
+        return jsonify({"erreur": "'points' doit être une liste"}), 400
+    valides = []
+    for p in points[:config.MAX_POINTS_PAR_ENVOI]:
+        try:
+            lat, lon = float(p["lat"]), float(p["lon"])
+            if not (-90 <= lat <= 90 and -180 <= lon <= 180 and ts_valide(p["ts"])):
+                continue
+            if float(p.get("precision_m", 99)) > config.PRECISION_GPS_MAX_M:
+                continue
+            valides.append({"lat": lat, "lon": lon, "ts": str(p["ts"])})
+        except (KeyError, TypeError, ValueError):
+            continue
+    if not valides:
+        return jsonify({"ok": True, "recu": 0, "ignore": len(points)})
+    try:
+        maj, n = routes.ajouter_trace(numero, valides)
+    except stockage.StockageIndisponible as e:
+        return jsonify({"erreur": str(e)}), 503
+    if maj is None:
+        return jsonify({"erreur": f"Route {numero} introuvable."}), 404
+    return jsonify({"ok": True, "recu": len(valides), "ignore": len(points) - len(valides), "points_trace": n})
+
+
 @bp.get("/signalement/types")
 def liste_types():
     return jsonify(catalogue())

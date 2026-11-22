@@ -312,11 +312,13 @@ def creer_route(doc, id_minimum):
     return numero
 
 
-def modifier_points_route(numero, transformer, si_absente=None):
-    """Remplace les points de la route par transformer(points). Retourne la route, ou None.
+def modifier_points_route(numero, transformer, si_absente=None, champ="points"):
+    """Remplace un ensemble de points de la route par transformer(ancien). Retourne la route, ou None.
 
-    si_absente : document à créer si la route n'a encore aucun point enregistré (route de
-    départ ou rue du catalogue : leur premier point relevé crée leur document)."""
+    champ : "points" (points COMPTÉS dans l'avancement) ou "trace" (positions de la
+            cartographie en direct, qui donnent seulement la forme exacte, NON comptées).
+    si_absente : document à créer si la route n'a encore rien d'enregistré (route de départ
+    ou rue du catalogue : leur premier point relevé crée leur document)."""
     if _type_ou_erreur() == "firestore":
         from google.cloud import firestore as gfs
         db = _firestore()
@@ -328,12 +330,13 @@ def modifier_points_route(numero, transformer, si_absente=None):
             if not snap.exists:
                 if si_absente is None:
                     return None
-                route = {**si_absente, "id": numero, "points": transformer([])}
+                route = {"points": [], **si_absente, "id": numero}
+                route[champ] = transformer([])
                 transaction.set(ref, route)
                 return route
             route = snap.to_dict()
-            route["points"] = transformer(route.get("points", []))
-            transaction.update(ref, {"points": route["points"]})
+            route[champ] = transformer(route.get(champ, []))
+            transaction.update(ref, {champ: route[champ]})
             return route
 
         return modifier(db.transaction())
@@ -342,14 +345,22 @@ def modifier_points_route(numero, transformer, si_absente=None):
         if ligne is None:
             if si_absente is None:
                 return None
-            points = transformer([])
+            points = transformer([]) if champ == "points" else []
             extra = {k: v for k, v in si_absente.items() if k not in ("nom", "points")}
+            if champ != "points":
+                extra[champ] = transformer([])
             con.execute("INSERT INTO routes (id, nom, points, details) VALUES (?,?,?,?)",
                         (numero, si_absente["nom"], json.dumps(points), json.dumps(extra, ensure_ascii=False)))
-            return {**si_absente, "id": numero, "points": points}
-        points = transformer(json.loads(ligne[1]))
-        con.execute("UPDATE routes SET points = ? WHERE id = ?", (json.dumps(points), numero))
-    return {**json.loads(ligne[2] or "{}"), "id": numero, "nom": ligne[0], "points": points}
+            return {**si_absente, **extra, "id": numero, "points": points}
+        points = json.loads(ligne[1])
+        details = json.loads(ligne[2] or "{}")
+        if champ == "points":
+            points = transformer(points)
+        else:
+            details[champ] = transformer(details.get(champ, []))
+        con.execute("UPDATE routes SET points = ?, details = ? WHERE id = ?",
+                    (json.dumps(points), json.dumps(details, ensure_ascii=False), numero))
+    return {**details, "id": numero, "nom": ligne[0], "points": points}
 
 
 def observations_recentes(depuis):

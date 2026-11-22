@@ -133,8 +133,11 @@ def liste(rafraichir=False):
     for r in list(statiques()) + creees:
         if r["origine"] == "catalogue" and cle_nom(r["nom"]) in cles_creees:
             continue
-        pts = _points_terrain(docs.get(r["id"], {}))
-        resultat.append({**r, "points": pts, **statut(len(pts))})
+        doc = docs.get(r["id"], {})
+        pts = _points_terrain(doc)
+        trace = [{"latitude": p["lat"], "longitude": p["lon"]} for p in doc.get("trace", [])]
+        # « points » : COMPTÉS dans l'avancement ; « trace » : forme exacte, NON comptée
+        resultat.append({**r, "points": pts, "trace": trace, **statut(len(pts))})
     return resultat
 
 
@@ -152,6 +155,9 @@ def prochain_numero_minimum():
 def geometrie(route):
     """Tracé utilisé pour la distance : les points de terrain dès qu'il y en a 2, sinon la
     ligne de référence (routes de départ), sinon le point unique, sinon rien."""
+    trace = route.get("trace", [])
+    if len(trace) >= 2:
+        return trace          # forme exacte relevée en cartographie en direct
     pts = route.get("points", [])
     if len(pts) >= 2:
         return pts
@@ -256,3 +262,53 @@ def ajouter_point(numero, point, routes=None):
     import carte
     carte.invalider_cache()
     return maj, ajoute["fait"]
+
+
+
+# --- Tracé de forme (cartographie en direct, positions toutes les 2 s) ----------------
+
+def _simplifier(points, tolerance_m):
+    """Douglas-Peucker : garde seulement les points nécessaires à la forme (à tolerance_m près)."""
+    if len(points) <= 2:
+        return points
+    lat0, lon0 = points[0]["lat"], points[0]["lon"]
+    xy = [_xy(lat0, lon0, p["lat"], p["lon"]) for p in points]
+    garder = [False] * len(points)
+    garder[0] = garder[-1] = True
+    pile = [(0, len(points) - 1)]
+    while pile:
+        a, b = pile.pop()
+        dmax, imax = 0.0, None
+        for i in range(a + 1, b):
+            d = _distance_segment(*xy[i], *xy[a], *xy[b])
+            if d > dmax:
+                dmax, imax = d, i
+        if imax is not None and dmax > tolerance_m:
+            garder[imax] = True
+            pile += [(a, imax), (imax, b)]
+    return [p for p, g in zip(points, garder) if g]
+
+
+def ajouter_trace(numero, nouveaux, routes=None):
+    """Ajoute des positions au TRACÉ de forme de la route (ne compte pas dans l'avancement).
+    Retourne (route mise à jour, nombre de points du tracé) ou (None, 0)."""
+    route = par_id(numero, routes)
+    if route is None:
+        return None, 0
+
+    def transformer(trace):
+        trace = list(trace)
+        for p in nouveaux:
+            proche = any(distance_trace_m(p["lat"], p["lon"], [{"latitude": q["lat"], "longitude": q["lon"]}])
+                         < config.DISTANCE_MIN_TRACE_M for q in trace)
+            if not proche:
+                trace = inserer_point(trace, p)
+        trace = _simplifier(trace, config.TOLERANCE_TRACE_M)
+        return trace[-config.MAX_POINTS_TRACE:]
+
+    si_absente = {"nom": route["nom"], "origine": route["origine"]}
+    maj = stockage.modifier_points_route(numero, transformer, si_absente=si_absente, champ="trace")
+    invalider_cache()
+    import carte
+    carte.invalider_cache()
+    return maj, len((maj or {}).get("trace", []))
